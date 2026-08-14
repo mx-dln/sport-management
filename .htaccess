@@ -1,0 +1,10 @@
+DirectoryIndex index.php
+Options -Indexes
+
+RewriteEngine On
+RewriteRule ^login\.php$ public/login.php [L]
+RewriteRule ^register\.php$ public/register.php [L]
+RewriteRule ^register_success\.php$ public/register_success.php [L]
+RewriteRule ^logout\.php$ public/logout.php [L]
+RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+RewriteRule ^uploads/(.*)$ public/uploads/$1 [L]
