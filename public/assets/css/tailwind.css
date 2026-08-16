@@ -1,5 +1,5 @@
 @media print {
-    .no-print, aside, header, footer { display: none !important; }
+    .no-print, aside, header, footer, .smis-splash, .smis-topbar { display: none !important; }
     body { background: #fff !important; }
     main { margin: 0 !important; padding: 0 !important; }
     .print-card { box-shadow: none !important; border: 1px solid #d1d5db !important; }
@@ -449,5 +449,107 @@ html.dark [data-patch-modal] h3 {
 html.dark [data-patch-modal] p,
 html.dark [data-patch-modal] li {
     color: #cbd5e1 !important;
+}
+
+/* ===== Splash screen ===== */
+.smis-splash {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+.smis-splash.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+html.dark .smis-splash {
+    background-image: linear-gradient(to bottom right, #020617, #0f172a, #111827) !important;
+}
+
+html.dark .smis-splash .text-slate-900 {
+    color: #f8fafc !important;
+}
+
+html.dark .smis-splash .text-slate-500,
+html.dark .smis-splash .text-slate-400 {
+    color: #94a3b8 !important;
+}
+
+/* ===== Progress bars ===== */
+.smis-progress {
+    position: relative;
+    height: 6px;
+    overflow: hidden;
+    border-radius: 9999px;
+    background: #e2e8f0;
+}
+
+html.dark .smis-progress {
+    background: #334155 !important;
+}
+
+.smis-progress-bar {
+    display: block;
+    height: 100%;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--theme-color, #2563eb) 55%, white), var(--theme-color, #2563eb));
+    transition: width 0.25s ease;
+    width: 0;
+}
+
+.smis-progress.is-animating .smis-progress-bar {
+    width: 40%;
+    animation: smis-progress-slide 1.15s ease-in-out infinite;
+}
+
+.smis-progress.is-complete .smis-progress-bar {
+    width: 100%;
+    background: var(--theme-color, #2563eb);
+}
+
+@keyframes smis-progress-slide {
+    0%   { margin-left: -40%; }
+    100% { margin-left: 110%; }
+}
+
+/* ===== Top loading bar (page loads + AJAX) ===== */
+.smis-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 95;
+    overflow: hidden;
+}
+
+.smis-topbar-bar {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--theme-color, #2563eb) 45%, white), var(--theme-color, #2563eb));
+    box-shadow: 0 0 8px color-mix(in srgb, var(--theme-color, #2563eb) 75%, transparent);
+    transition: width 0.3s ease, opacity 0.3s ease;
+}
+
+.smis-topbar.is-active .smis-topbar-bar {
+    width: 55%;
+    animation: smis-progress-slide 0.9s ease-in-out infinite;
+}
+
+.smis-topbar.is-complete .smis-topbar-bar {
+    width: 100%;
+}
+
+/* ===== Button loading state ===== */
+.smis-btn-loading {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: progress;
+    opacity: 0.85;
 }
 

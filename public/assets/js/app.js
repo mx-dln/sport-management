@@ -72,6 +72,17 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
+document.addEventListener('submit', (event) => {
+    const form = event.target.closest('form');
+    if (!form || form.matches('[data-ajax-form]')) return;
+    const button = form.querySelector('button[type="submit"], button:not([type]), input[type="submit"]');
+    if (!button) return;
+    button.disabled = true;
+    button.classList.add('smis-btn-loading');
+    button.innerHTML = `${loadingSpinner()}<span>${button.dataset.loadingText || 'Submitting...'}</span>`;
+    startTopProgress();
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     updateThemeToggle();
     initEnhancedTables();
