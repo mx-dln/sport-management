@@ -16,15 +16,19 @@ class AnnouncementController
     public function save(array $d): array
     {
         $id = (int)($d['id'] ?? 0);
+
+        $sportId = ($d['sport_id'] ?? '') !== '' ? (int)$d['sport_id'] : null;
+        $teamId = ($d['team_id'] ?? '') !== '' ? (int)$d['team_id'] : null;
+
         if ($id > 0) {
             if (!$this->canManage((int)$id)) {
                 return ['ok' => false, 'message' => 'You can only edit your own announcements.'];
             }
             $stmt = $this->pdo->prepare('UPDATE announcements SET title=?,body=?,sport_id=?,team_id=? WHERE id=?');
-            $stmt->execute([$d['title'], $d['body'], $d['sport_id'] ?? null, $d['team_id'] ?? null, $id]);
+            $stmt->execute([$d['title'], $d['body'], $sportId, $teamId, $id]);
         } else {
             $stmt = $this->pdo->prepare('INSERT INTO announcements (title,body,sport_id,team_id,created_by) VALUES (?,?,?,?,?)');
-            $stmt->execute([$d['title'], $d['body'], $d['sport_id'] ?? null, $d['team_id'] ?? null, current_user()['id'] ?? null]);
+            $stmt->execute([$d['title'], $d['body'], $sportId, $teamId, current_user()['id'] ?? null]);
         }
         if (!empty($d['send_sms']) && !empty($d['team_id'])) {
             (new ScheduleController($this->pdo))->notifyTeam((int)$d['team_id'], $d['title'] . ': ' . $d['body']);
