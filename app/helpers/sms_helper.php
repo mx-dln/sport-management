@@ -18,6 +18,11 @@ function normalize_phone_number(string $phone): string
     return $digits;
 }
 
+function decode_secret(string $value): string
+{
+    return str_starts_with($value, 'base64:') ? (string)base64_decode(substr($value, 7)) : $value;
+}
+
 function sendSMS(string $phone, string $message): array
 {
     $configPath = __DIR__ . '/../config/sms.php';
@@ -45,10 +50,10 @@ function sendSMS(string $phone, string $message): array
     $phone = normalize_phone_number($phone);
 
     $payload = http_build_query([
-        'apikey' => $config['api_key'],
+        'apikey' => decode_secret($config['api_key']),
         'number' => $phone,
         'message' => $message,
-        'sendername' => $config['sender_name'],
+        'sendername' => decode_secret($config['sender_name']),
     ]);
 
     $ch = curl_init($config['endpoint']);
