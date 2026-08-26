@@ -1,5 +1,5 @@
 @media print {
-    .no-print, aside, header, footer, .smis-splash, .smis-topbar { display: none !important; }
+    .no-print, aside, header, footer, .smis-splash, .smis-topbar, .smis-loader { display: none !important; }
     body { background: #fff !important; }
     main { margin: 0 !important; padding: 0 !important; }
     .print-card { box-shadow: none !important; border: 1px solid #d1d5db !important; }
@@ -541,6 +541,42 @@ html.dark .smis-progress {
 
 .smis-topbar.is-complete .smis-topbar-bar {
     width: 100%;
+}
+
+/* ===== Circular loader (shown only during progress) ===== */
+.smis-loader {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 96;
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    transform: translate(-50%, -50%);
+    place-items: center;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+}
+
+html.dark .smis-loader {
+    background: #111827 !important;
+    border-color: #334155 !important;
+}
+
+.smis-loader-spinner {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 9999px;
+    border: 3px solid color-mix(in srgb, var(--theme-color, #2563eb) 22%, transparent);
+    border-top-color: var(--theme-color, #2563eb);
+    animation: smis-spin 0.7s linear infinite;
+}
+
+@keyframes smis-spin {
+    to { transform: rotate(360deg); }
 }
 
 /* ===== Button loading state ===== */

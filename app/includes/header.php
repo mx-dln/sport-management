@@ -1,4 +1,6 @@
-<?php require_once __DIR__ . '/../helpers/auth.php'; ?>
+<?php require_once __DIR__ . '/../helpers/auth.php';
+$isLoginPage = basename($_SERVER['SCRIPT_NAME'] ?? '') === 'login.php';
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -24,6 +26,7 @@
     </style>
 </head>
 <body class="bg-slate-100 text-slate-900">
+<?php if ($isLoginPage): ?>
 <div class="smis-splash fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-slate-100" data-splash data-splash-duration="900" role="status" aria-live="polite">
     <div class="flex flex-col items-center gap-5 px-6 text-center">
         <?php if (app_icon_url()): ?>
@@ -44,8 +47,12 @@
     </div>
 </div>
 <noscript><style>.smis-splash{display:none!important}</style></noscript>
+<?php endif; ?>
 <div class="smis-topbar" data-top-progress hidden>
     <span class="smis-topbar-bar"></span>
+</div>
+<div class="smis-loader" data-circular-loader hidden>
+    <span class="smis-loader-spinner"></span>
 </div>
 <script>
 (function () {
@@ -57,9 +64,11 @@
     window.loadingSpinner = loadingSpinner;
 
     var topBar = document.querySelector('[data-top-progress]');
+    var loader = document.querySelector('[data-circular-loader]');
     var topTimer = null;
 
     window.startTopProgress = function () {
+        if (loader) loader.hidden = false;
         if (!topBar) return;
         clearTimeout(topTimer);
         topBar.hidden = false;
@@ -68,6 +77,7 @@
     };
 
     window.finishTopProgress = function () {
+        if (loader) loader.hidden = true;
         if (!topBar) return;
         clearTimeout(topTimer);
         topBar.classList.remove('is-active');
@@ -103,6 +113,9 @@
             setTimeout(finish, Math.max(0, minDuration - (Date.now() - startedAt)));
         });
         setTimeout(finish, minDuration + 1600);
+    } else {
+        startTopProgress();
+        window.addEventListener('load', function () { finishTopProgress(); });
     }
 })();
 </script>
