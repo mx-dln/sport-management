@@ -104,7 +104,7 @@ require __DIR__ . '/../../includes/header.php';
             <div class="rounded-lg bg-slate-50 p-3 text-sm text-slate-500">Team assignment is managed by the sports office or your coach.</div>
             <label class="block">
                 <span class="text-sm font-medium">Profile Photo / 2x2</span>
-                <input class="form-input mt-1" type="file" name="profile_photo" accept=".jpg,.jpeg,.png">
+                <input class="form-input mt-1" type="file" name="profile_photo" accept="image/*" capture="environment">
             </label>
             <label class="block md:col-span-3">
                 <span class="text-sm font-medium">Address</span>

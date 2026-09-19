@@ -231,7 +231,7 @@ require __DIR__ . '/../../includes/header.php';
                 <thead class="bg-slate-50"><tr><th class="table-th">Recipient</th><th class="table-th">Phone</th><th class="table-th">Status</th><th class="table-th">Date</th></tr></thead>
                 <tbody>
                     <?php foreach ($sms as $l): ?>
-                        <tr><td class="table-td font-semibold"><?= e($l['recipient_name']) ?></td><td class="table-td"><?= e($l['phone_number']) ?></td><td class="table-td"><?= e($l['status']) ?></td><td class="table-td"><?= e(format_datetime_12($l['sent_at'] ?? '')) ?></td></tr>
+                        <tr><td class="table-td font-semibold"><?= e($l['recipient_name']) ?></td><td class="table-td"><?= e($l['phone_number']) ?></td><td class="table-td"><?= e(ucwords(str_replace('_', ' ', (string)$l['status']))) ?></td><td class="table-td"><?= e(format_datetime_12($l['sent_at'] ?? '')) ?></td></tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>

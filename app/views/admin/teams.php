@@ -78,7 +78,7 @@ require __DIR__ . '/../../includes/header.php';
                             <span>Assign</span>
                         </button>
                     </td>
-                    <td class="table-td"><?= e($t['status']) ?></td>
+                    <td class="table-td"><?= e(strtoupper((string)$t['status'])) ?></td>
                     <td class="table-td">
                         <div class="flex flex-wrap gap-2">
                             <button class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50" type="button" data-modal-open="#team-edit-modal-<?= e((string)$t['id']) ?>">Edit</button>
@@ -142,8 +142,8 @@ require __DIR__ . '/../../includes/header.php';
                     <label class="block">
                         <span class="text-sm font-semibold text-slate-700">Status</span>
                         <select class="form-input mt-1" name="status">
-                            <option value="active" <?= $t['status'] === 'active' ? 'selected' : '' ?>>active</option>
-                            <option value="inactive" <?= $t['status'] === 'inactive' ? 'selected' : '' ?>>inactive</option>
+                            <option value="active" <?= $t['status'] === 'active' ? 'selected' : '' ?>>ACTIVE</option>
+                            <option value="inactive" <?= $t['status'] === 'inactive' ? 'selected' : '' ?>>INACTIVE</option>
                         </select>
                     </label>
                     <button class="btn-primary">Save Changes</button>
@@ -242,3 +242,4 @@ require __DIR__ . '/../../includes/header.php';
     </div>
 <?php endforeach; ?>
 <?php require __DIR__ . '/../../includes/footer.php'; ?>
+

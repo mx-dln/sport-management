@@ -79,6 +79,12 @@ class AuthController
             redirect(app_url('register.php'));
         }
 
+        $namePattern = "/^[A-Za-z .'-]+$/";
+        if (!preg_match($namePattern, $firstName) || !preg_match($namePattern, $lastName) || ($middleName !== '' && !preg_match($namePattern, $middleName))) {
+            flash('error', 'Names must contain letters only. Spaces, hyphens, apostrophes, and periods are allowed.');
+            redirect(app_url('register.php'));
+        }
+
         if (strlen($password) < 6 || $password !== $confirmPassword) {
             flash('error', 'Password must be at least 6 characters and match the confirmation.');
             redirect(app_url('register.php'));

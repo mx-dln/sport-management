@@ -264,7 +264,7 @@ require __DIR__ . '/../../includes/header.php';
                             <td class="table-td"><?= e($log['message']) ?></td>
                             <td class="table-td"><?= e(format_datetime_12($log['sent_at'] ?? '')) ?></td>
                             <td class="table-td">
-                                <span class="status-pill <?= str_starts_with((string)$log['status'], 'sent') || str_starts_with((string)$log['status'], 'queued') ? 'status-active' : (str_starts_with((string)$log['status'], 'failed') ? 'status-rejected' : 'status-pending') ?>"><?= e($log['status']) ?></span>
+                                <span class="status-pill <?= str_starts_with((string)$log['status'], 'sent') || str_starts_with((string)$log['status'], 'queued') ? 'status-active' : (str_starts_with((string)$log['status'], 'failed') ? 'status-rejected' : 'status-pending') ?>"><?= e(ucwords(str_replace('_', ' ', (string)$log['status']))) ?></span>
                             </td>
                         </tr>
                     <?php endforeach; ?>

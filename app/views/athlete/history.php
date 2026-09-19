@@ -162,7 +162,7 @@ require __DIR__ . '/../../includes/header.php';
                 </label>
                 <label class="block md:col-span-2">
                     <span class="text-sm font-semibold text-slate-700">Proof / Certificate</span>
-                    <input class="form-input mt-1" type="file" name="proof_file" accept=".pdf,.jpg,.jpeg,.png">
+                    <input class="form-input mt-1" type="file" name="proof_file" accept=".pdf,image/*">
                     <p class="mt-1 text-xs text-slate-500">Optional. PDF, JPG, JPEG, or PNG up to 8 MB.</p>
                 </label>
                 <button class="btn-primary md:col-span-2">Save History</button>
@@ -244,7 +244,7 @@ require __DIR__ . '/../../includes/header.php';
                         <?php if ($record['proof_file']): ?>
                             <p class="mt-1 text-xs text-slate-500">Current: <a class="font-semibold text-blue-600 underline" href="<?= e(app_url($record['proof_file'])) ?>" data-attachment-preview data-attachment-url="<?= e(app_url($record['proof_file'])) ?>" data-attachment-name="<?= e($record['proof_name'] ?: 'Proof Document') ?>"><?= e($record['proof_name']) ?></a> — upload a new file to replace it.</p>
                         <?php endif; ?>
-                        <input class="form-input mt-1" type="file" name="proof_file" accept=".pdf,.jpg,.jpeg,.png">
+                        <input class="form-input mt-1" type="file" name="proof_file" accept=".pdf,image/*">
                     </label>
                     <button class="btn-primary md:col-span-2">Save Changes</button>
                 </form>

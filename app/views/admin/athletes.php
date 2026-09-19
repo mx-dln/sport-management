@@ -54,10 +54,10 @@ require __DIR__ . '/../../includes/header.php';
                         <option value="<?= e($t['id']) ?>"><?= e($t['name']) ?></option><?php endforeach; ?>
                 </select>
                 <select class="form-input" name="athlete_status">
-                    <option>Active</option>
-                    <option>Inactive</option>
-                    <option>Graduated</option>
-                    <option>Injured</option>
+                    <option value="Active">ACTIVE</option>
+                    <option value="Inactive">INACTIVE</option>
+                    <option value="Graduated">GRADUATED</option>
+                    <option value="Injured">INJURED</option>
                 </select>
                 <input class="form-input" type="file" name="profile_photo" accept=".jpg,.jpeg,.png">
                 <button class="btn-primary md:col-span-3" type="submit">Save Athlete</button>
@@ -90,7 +90,7 @@ require __DIR__ . '/../../includes/header.php';
                             <option value="">All Status</option>
                             <?php foreach (['Active', 'Inactive', 'Graduated', 'Injured'] as $status): ?>
                                 <option value="<?= e($status) ?>" <?= $selectedStatus === $status ? 'selected' : '' ?>>
-                                    <?= e($status) ?></option><?php endforeach; ?>
+                                    <?= e(strtoupper($status)) ?></option><?php endforeach; ?>
                         </select>
                         <button class="btn-primary" type="submit">Filter</button>
                         <a class="btn-muted text-center" href="<?= e(app_url('index.php?page=athletes')) ?>">Reset</a>
@@ -128,7 +128,7 @@ require __DIR__ . '/../../includes/header.php';
                                 <td class="table-td"><?= e($a['sport_name'] ?: 'Unassigned') ?></td>
                                 <td class="table-td"><?= e($a['team_name'] ?: 'Unassigned') ?></td>
                                 <td class="table-td"><span
-                                        class="status-pill <?= e($statusClass) ?>"><?= e($a['athlete_status']) ?></span>
+                                        class="status-pill <?= e($statusClass) ?>"><?= e(strtoupper((string)$a['athlete_status'])) ?></span>
                                 </td>
                                 <td class="table-td text-right">
                                     <div class="flex justify-end gap-2">
@@ -290,7 +290,7 @@ require __DIR__ . '/../../includes/header.php';
                                 <span class="text-sm font-semibold text-slate-700">Athlete Status</span>
                                 <select class="form-input mt-1" name="athlete_status">
                                     <?php foreach (['Active', 'Inactive', 'Graduated', 'Injured'] as $status): ?>
-                                        <option value="<?= e($status) ?>" <?= ($a['athlete_status'] ?? '') === $status ? 'selected' : '' ?>><?= e($status) ?></option>
+                                        <option value="<?= e($status) ?>" <?= ($a['athlete_status'] ?? '') === $status ? 'selected' : '' ?>><?= e(strtoupper($status)) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </label>

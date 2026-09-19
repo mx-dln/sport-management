@@ -6,14 +6,14 @@ $sports = (new SportController($pdo))->all();
 require __DIR__ . '/../../includes/header.php';
 ?>
 <div class="min-h-screen lg:pl-72"><?php require __DIR__ . '/../../includes/sidebar.php'; require __DIR__ . '/../../includes/navbar.php'; ?><main class="p-4 lg:p-6">
-<form class="mb-6 grid gap-3 rounded-xl border border-slate-200 bg-white p-5 shadow-sm md:grid-cols-[1fr_2fr_auto]" method="post" action="<?= project_url('app/ajax/sport_ajax.php') ?>" data-ajax-form>
-<input class="form-input" name="name" placeholder="Sport name" required><input class="form-input" name="description" placeholder="Description"><button class="btn-primary">Save Sport</button></form>
+<form class="mb-6 grid gap-3 rounded-xl border border-slate-200 bg-white p-5 shadow-sm md:grid-cols-[1fr_2fr_160px_auto]" method="post" action="<?= project_url('app/ajax/sport_ajax.php') ?>" data-ajax-form>
+<input class="form-input" name="name" placeholder="Sport name" required><input class="form-input" name="description" placeholder="Description"><select class="form-input" name="status"><option value="active">ACTIVE</option><option value="inactive">INACTIVE</option></select><button class="btn-primary">Save Sport</button></form>
 <div class="rounded-xl border border-slate-200 bg-white shadow-sm"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="table-th">Sport</th><th class="table-th">Description</th><th class="table-th">Status</th><th class="table-th">Action</th></tr></thead><tbody>
 <?php foreach ($sports as $s): ?>
 <tr>
     <td class="table-td font-medium"><?= e($s['name']) ?></td>
     <td class="table-td"><?= e($s['description'] ?: '—') ?></td>
-    <td class="table-td"><span class="status-pill <?= $s['status'] === 'active' ? 'status-active' : 'status-inactive' ?>"><?= e($s['status']) ?></span></td>
+    <td class="table-td"><span class="status-pill <?= $s['status'] === 'active' ? 'status-active' : 'status-inactive' ?>"><?= e(strtoupper((string)$s['status'])) ?></span></td>
     <td class="table-td">
         <div class="flex flex-wrap gap-2">
             <button class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50" type="button" data-modal-open="#sport-edit-modal-<?= e((string)$s['id']) ?>">Edit</button>
@@ -53,8 +53,8 @@ require __DIR__ . '/../../includes/header.php';
                 <label class="block">
                     <span class="text-sm font-semibold text-slate-700">Status</span>
                     <select class="form-input mt-1" name="status">
-                        <option value="active" <?= $s['status'] === 'active' ? 'selected' : '' ?>>active</option>
-                        <option value="inactive" <?= $s['status'] === 'inactive' ? 'selected' : '' ?>>inactive</option>
+                        <option value="active" <?= $s['status'] === 'active' ? 'selected' : '' ?>>ACTIVE</option>
+                        <option value="inactive" <?= $s['status'] === 'inactive' ? 'selected' : '' ?>>INACTIVE</option>
                     </select>
                 </label>
                 <button class="btn-primary">Save Changes</button>
@@ -64,3 +64,4 @@ require __DIR__ . '/../../includes/header.php';
 </div>
 <?php endforeach; ?>
 <?php require __DIR__ . '/../../includes/footer.php'; ?>
+

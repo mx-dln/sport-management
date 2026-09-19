@@ -36,8 +36,8 @@ require __DIR__ . '/../../includes/header.php';
                         <td class="table-td"><?= e(str_replace('_', ' ', $u['role'])) ?></td>
                         <td class="table-td">
                             <select class="form-input" data-ajax-status data-url="<?= project_url('app/ajax/user_ajax.php') ?>" data-id="<?= e($u['id']) ?>" data-action="status">
-                                <option <?= $u['status']==='active'?'selected':'' ?>>active</option>
-                                <option <?= $u['status']==='inactive'?'selected':'' ?>>inactive</option>
+                                <option value="active" <?= $u['status']==='active'?'selected':'' ?>>ACTIVE</option>
+                                <option value="inactive" <?= $u['status']==='inactive'?'selected':'' ?>>INACTIVE</option>
                             </select>
                         </td>
                     </tr>
@@ -86,7 +86,7 @@ require __DIR__ . '/../../includes/header.php';
                 </label>
                 <label class="mb-4 block">
                     <span class="text-sm font-medium">Status</span>
-                    <select class="form-input mt-1" name="status"><option>active</option><option>inactive</option></select>
+                    <select class="form-input mt-1" name="status"><option value="active">ACTIVE</option><option value="inactive">INACTIVE</option></select>
                 </label>
                 <button class="btn-primary w-full" type="submit">Save User</button>
             </form>
@@ -94,3 +94,4 @@ require __DIR__ . '/../../includes/header.php';
     </div>
 </div>
 <?php require __DIR__ . '/../../includes/footer.php'; ?>
+
