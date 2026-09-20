@@ -1,5 +1,8 @@
 <?php require_once __DIR__ . '/../helpers/auth.php';
-$isLoginPage = basename($_SERVER['SCRIPT_NAME'] ?? '') === 'login.php';
+$showLoginSplash = !empty($_SESSION['show_login_splash']);
+if ($showLoginSplash) {
+    unset($_SESSION['show_login_splash']);
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -26,7 +29,7 @@ $isLoginPage = basename($_SERVER['SCRIPT_NAME'] ?? '') === 'login.php';
     </style>
 </head>
 <body class="bg-slate-100 text-slate-900">
-<?php if ($isLoginPage): ?>
+<?php if ($showLoginSplash): ?>
 <div class="smis-splash fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-slate-100" data-splash data-splash-duration="900" role="status" aria-live="polite">
     <div class="flex flex-col items-center gap-5 px-6 text-center">
         <?php if (app_icon_url()): ?>
@@ -48,9 +51,6 @@ $isLoginPage = basename($_SERVER['SCRIPT_NAME'] ?? '') === 'login.php';
 </div>
 <noscript><style>.smis-splash{display:none!important}</style></noscript>
 <?php endif; ?>
-<div class="smis-topbar" data-top-progress hidden>
-    <span class="smis-topbar-bar"></span>
-</div>
 <div class="smis-loader" data-circular-loader hidden>
     <span class="smis-loader-spinner"></span>
 </div>
@@ -63,29 +63,14 @@ $isLoginPage = basename($_SERVER['SCRIPT_NAME'] ?? '') === 'login.php';
     }
     window.loadingSpinner = loadingSpinner;
 
-    var topBar = document.querySelector('[data-top-progress]');
     var loader = document.querySelector('[data-circular-loader]');
-    var topTimer = null;
 
     window.startTopProgress = function () {
         if (loader) loader.hidden = false;
-        if (!topBar) return;
-        clearTimeout(topTimer);
-        topBar.hidden = false;
-        topBar.classList.remove('is-complete');
-        topBar.classList.add('is-active');
     };
 
     window.finishTopProgress = function () {
         if (loader) loader.hidden = true;
-        if (!topBar) return;
-        clearTimeout(topTimer);
-        topBar.classList.remove('is-active');
-        topBar.classList.add('is-complete');
-        topTimer = setTimeout(function () {
-            topBar.hidden = true;
-            topBar.classList.remove('is-complete');
-        }, 600);
     };
 
     var splash = document.querySelector('[data-splash]');

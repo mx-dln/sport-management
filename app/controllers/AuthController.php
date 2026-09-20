@@ -44,6 +44,7 @@ class AuthController
             'email' => $user['email'],
             'role' => $user['role'],
         ];
+        $_SESSION['show_login_splash'] = true;
 
         redirect(dashboard_path($user['role']));
     }

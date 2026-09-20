@@ -1,5 +1,5 @@
 @media print {
-    .no-print, aside, header, footer, .smis-splash, .smis-topbar, .smis-loader { display: none !important; }
+    .no-print, aside, header, footer, .smis-splash, .smis-loader { display: none !important; }
     body { background: #fff !important; }
     main { margin: 0 !important; padding: 0 !important; }
     .print-card { box-shadow: none !important; border: 1px solid #d1d5db !important; }
@@ -512,35 +512,6 @@ html.dark .smis-progress {
 @keyframes smis-progress-slide {
     0%   { margin-left: -40%; }
     100% { margin-left: 110%; }
-}
-
-/* ===== Top loading bar (page loads + AJAX) ===== */
-.smis-topbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    z-index: 95;
-    overflow: hidden;
-}
-
-.smis-topbar-bar {
-    display: block;
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, color-mix(in srgb, var(--theme-color, #2563eb) 45%, white), var(--theme-color, #2563eb));
-    box-shadow: 0 0 8px color-mix(in srgb, var(--theme-color, #2563eb) 75%, transparent);
-    transition: width 0.3s ease, opacity 0.3s ease;
-}
-
-.smis-topbar.is-active .smis-topbar-bar {
-    width: 55%;
-    animation: smis-progress-slide 0.9s ease-in-out infinite;
-}
-
-.smis-topbar.is-complete .smis-topbar-bar {
-    width: 100%;
 }
 
 /* ===== Circular loader (shown only during progress) ===== */
