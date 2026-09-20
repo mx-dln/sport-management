@@ -18,6 +18,27 @@ $statCards = [
     ['key' => 'sms_sent', 'label' => 'SMS Logs', 'hint' => 'Message records', 'page' => 'sms'],
 ];
 $maxCount = max(1, ...array_map(fn($card) => (int)($counts[$card['key']] ?? 0), $statCards));
+$programMixCards = array_slice($statCards, 0, 4);
+$programMixColors = ['#2563eb', '#16a34a', '#f97316', '#9333ea'];
+$programMixTotal = array_sum(array_map(fn($card) => (int)($counts[$card['key']] ?? 0), $programMixCards));
+$programMixGradient = '';
+$programMixStart = 0.0;
+foreach ($programMixCards as $index => $card) {
+    $value = (int)($counts[$card['key']] ?? 0);
+    $percent = $programMixTotal > 0 ? ($value / $programMixTotal) * 100 : 0;
+    $programMixEnd = $programMixStart + $percent;
+    $color = $programMixColors[$index % count($programMixColors)];
+    if ($percent > 0) {
+        $programMixGradient .= ($programMixGradient ? ', ' : '') . $color . ' ' . round($programMixStart, 2) . '% ' . round($programMixEnd, 2) . '%';
+    }
+    $programMixCards[$index]['value'] = $value;
+    $programMixCards[$index]['percent'] = $percent;
+    $programMixCards[$index]['color'] = $color;
+    $programMixStart = $programMixEnd;
+}
+if ($programMixGradient === '') {
+    $programMixGradient = '#e2e8f0 0% 100%';
+}
 require __DIR__ . '/../../includes/header.php';
 ?>
 <div class="min-h-screen lg:pl-72">
@@ -107,20 +128,30 @@ require __DIR__ . '/../../includes/header.php';
 
         <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 class="text-lg font-bold">Program Mix</h2>
-            <p class="mt-1 text-sm text-slate-500">Quick comparison of core records.</p>
-            <div class="mt-4 space-y-3">
-                <?php foreach (array_slice($statCards, 0, 4) as $card): ?>
-                    <?php $value = (int)($counts[$card['key']] ?? 0); ?>
-                    <div>
-                        <div class="mb-1 flex items-center justify-between text-sm">
-                            <span class="font-semibold text-slate-600"><?= e($card['label']) ?></span>
-                            <span class="text-slate-500"><?= e((string)$value) ?></span>
-                        </div>
-                        <div class="h-2 overflow-hidden rounded-full bg-slate-100">
-                            <div class="h-full rounded-full" style="width: <?= e((string)min(100, ($value / $maxCount) * 100)) ?>%; background: var(--theme-color);"></div>
+            <p class="mt-1 text-sm text-slate-500">Pie chart comparison of core records.</p>
+            <div class="mt-5 grid gap-5 sm:grid-cols-[180px_1fr] sm:items-center">
+                <div class="mx-auto grid h-44 w-44 place-items-center rounded-full shadow-inner" style="background: conic-gradient(<?= e($programMixGradient) ?>);">
+                    <div class="grid h-24 w-24 place-items-center rounded-full bg-white text-center shadow-sm">
+                        <div>
+                            <p class="text-2xl font-black text-slate-950"><?= e((string)$programMixTotal) ?></p>
+                            <p class="text-[10px] font-bold uppercase tracking-wide text-slate-500">Total</p>
                         </div>
                     </div>
-                <?php endforeach; ?>
+                </div>
+                <div class="space-y-3">
+                    <?php foreach ($programMixCards as $card): ?>
+                        <div class="flex items-center justify-between gap-3 rounded-xl bg-slate-50 px-3 py-2">
+                            <div class="flex min-w-0 items-center gap-2">
+                                <span class="h-3 w-3 shrink-0 rounded-full" style="background: <?= e($card['color']) ?>;"></span>
+                                <span class="truncate text-sm font-semibold text-slate-700"><?= e($card['label']) ?></span>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-black text-slate-950"><?= e((string)$card['value']) ?></p>
+                                <p class="text-xs font-semibold text-slate-500"><?= e((string)round($card['percent'])) ?>%</p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </section>
     </div>
