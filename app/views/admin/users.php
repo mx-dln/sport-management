@@ -25,6 +25,7 @@ require __DIR__ . '/../../includes/header.php';
                     <th class="table-th">Contact Number</th>
                     <th class="table-th">Role</th>
                     <th class="table-th">Status</th>
+                    <th class="table-th text-right">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,10 +41,17 @@ require __DIR__ . '/../../includes/header.php';
                                 <option value="inactive" <?= $u['status']==='inactive'?'selected':'' ?>>INACTIVE</option>
                             </select>
                         </td>
+                        <td class="table-td text-right">
+                            <form class="inline-block" method="post" action="<?= project_url('app/ajax/user_ajax.php') ?>" data-ajax-form data-confirm="Delete this user account?">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="id" value="<?= e((string)$u['id']) ?>">
+                                <button class="rounded-lg border border-rose-200 px-3 py-2 text-sm font-bold text-rose-600 hover:bg-rose-50" type="submit">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
                 <?php if (!$users): ?>
-                    <tr><td class="table-td py-10 text-center text-slate-500" colspan="5">No users found.</td></tr>
+                    <tr><td class="table-td py-10 text-center text-slate-500" colspan="6">No users found.</td></tr>
                 <?php endif; ?>
             </tbody>
         </table>
