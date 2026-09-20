@@ -41,11 +41,7 @@ if ($showLoginSplash) {
             <h1 class="text-2xl font-black text-slate-900"><?= e(app_setting('app_name')) ?></h1>
             <p class="mt-1 text-sm font-semibold text-slate-500"><?= e(school_name()) ?></p>
         </div>
-        <div class="w-64">
-            <div class="smis-progress is-animating" data-splash-progress>
-                <span class="smis-progress-bar"></span>
-            </div>
-        </div>
+        <div class="smis-splash-spinner" aria-hidden="true"></div>
         <p class="text-xs font-bold uppercase tracking-widest text-slate-400" data-splash-status>Loading&hellip;</p>
     </div>
 </div>
@@ -75,17 +71,12 @@ if ($showLoginSplash) {
 
     var splash = document.querySelector('[data-splash]');
     if (splash) {
-        var progress = splash.querySelector('[data-splash-progress]');
         var status = splash.querySelector('[data-splash-status]');
         var done = false;
 
         function finish() {
             if (done) return;
             done = true;
-            if (progress) {
-                progress.classList.remove('is-animating');
-                progress.classList.add('is-complete');
-            }
             if (status) status.textContent = 'Ready';
             setTimeout(function () { splash.classList.add('is-hidden'); }, 250);
             setTimeout(function () { splash.remove(); }, 800);

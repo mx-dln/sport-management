@@ -477,41 +477,14 @@ html.dark .smis-splash .text-slate-400 {
     color: #94a3b8 !important;
 }
 
-/* ===== Progress bars ===== */
-.smis-progress {
-    position: relative;
-    height: 6px;
-    overflow: hidden;
+
+.smis-splash-spinner {
+    width: 2.5rem;
+    height: 2.5rem;
     border-radius: 9999px;
-    background: #e2e8f0;
-}
-
-html.dark .smis-progress {
-    background: #334155 !important;
-}
-
-.smis-progress-bar {
-    display: block;
-    height: 100%;
-    border-radius: 9999px;
-    background: linear-gradient(90deg, color-mix(in srgb, var(--theme-color, #2563eb) 55%, white), var(--theme-color, #2563eb));
-    transition: width 0.25s ease;
-    width: 0;
-}
-
-.smis-progress.is-animating .smis-progress-bar {
-    width: 40%;
-    animation: smis-progress-slide 1.15s ease-in-out infinite;
-}
-
-.smis-progress.is-complete .smis-progress-bar {
-    width: 100%;
-    background: var(--theme-color, #2563eb);
-}
-
-@keyframes smis-progress-slide {
-    0%   { margin-left: -40%; }
-    100% { margin-left: 110%; }
+    border: 4px solid color-mix(in srgb, var(--theme-color, #2563eb) 20%, transparent);
+    border-top-color: var(--theme-color, #2563eb);
+    animation: smis-spin 0.75s linear infinite;
 }
 
 /* ===== Circular loader (shown only during progress) ===== */
