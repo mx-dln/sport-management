@@ -75,6 +75,11 @@ class AthleteController
         foreach ($fields as $field) {
             $values[$field] = trim((string)($data[$field] ?? ''));
         }
+        $namePattern = "/^[A-Za-z .'-]+$/";
+        if ($values['first_name'] === '' || $values['last_name'] === '' || !preg_match($namePattern, $values['first_name']) || !preg_match($namePattern, $values['last_name']) || ($values['middle_name'] !== '' && !preg_match($namePattern, $values['middle_name']))) {
+            return ['ok' => false, 'message' => 'Names must contain letters only. Spaces, hyphens, apostrophes, and periods are allowed.'];
+        }
+
         foreach (['user_id', 'sport_id', 'team_id'] as $nullableId) {
             $values[$nullableId] = $values[$nullableId] === '' ? null : (int)$values[$nullableId];
         }
