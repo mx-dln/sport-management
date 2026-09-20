@@ -37,7 +37,6 @@ $fieldsLeft = [
     'height' => 'Height',
     'blood_type' => 'Blood Type',
     'sport_name' => 'Sport',
-    'position' => 'Position',
 ];
 $fieldsRight = [
     'first_name' => 'First Name',

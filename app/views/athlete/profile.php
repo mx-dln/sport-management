@@ -107,7 +107,6 @@ require __DIR__ . '/../../includes/header.php';
                     <input class="form-input mt-1" name="<?= e($name) ?>" required value="<?= e($athlete[$name]) ?>">
                 </label>
             <?php endforeach; ?>
-            <input type="hidden" name="position" value="<?= e($athlete['position'] ?? '') ?>">
             <label class="block">
                 <span class="text-sm font-medium">Sport</span>
                 <select class="form-input mt-1" name="sport_id">

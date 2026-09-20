@@ -40,7 +40,7 @@ require __DIR__ . '/../../includes/header.php';
             <form id="athlete-biodata-form" class="grid gap-3 md:grid-cols-3" method="post"
                 enctype="multipart/form-data" action="<?= project_url('app/ajax/athlete_ajax.php') ?>" data-ajax-form
                 data-validate>
-                <?php foreach (['student_id' => 'Student ID', 'first_name' => 'First Name', 'middle_name' => 'Middle Name', 'last_name' => 'Last Name', 'birthdate' => 'Birthdate', 'address' => 'Address', 'course' => 'Course', 'year_level' => 'Year Level', 'section' => 'Section', 'contact_number' => 'Contact No.', 'guardian_name' => 'Guardian', 'guardian_contact' => 'Guardian Contact', 'emergency_contact' => 'Emergency Contact', 'height' => 'Height', 'weight' => 'Weight', 'blood_type' => 'Blood Type', 'medical_condition' => 'Medical Condition', 'position' => 'Position'] as $name => $label): ?>
+                <?php foreach (['student_id' => 'Student ID', 'first_name' => 'First Name', 'middle_name' => 'Middle Name', 'last_name' => 'Last Name', 'birthdate' => 'Birthdate', 'address' => 'Address', 'course' => 'Course', 'year_level' => 'Year Level', 'section' => 'Section', 'contact_number' => 'Contact No.', 'guardian_name' => 'Guardian', 'guardian_contact' => 'Guardian Contact', 'emergency_contact' => 'Emergency Contact', 'height' => 'Height', 'weight' => 'Weight', 'blood_type' => 'Blood Type', 'medical_condition' => 'Medical Condition'] as $name => $label): ?>
                     <input class="form-input" name="<?= e($name) ?>" placeholder="<?= e($label) ?>" <?= in_array($name, ['student_id', 'first_name', 'last_name'], true) ? 'required' : '' ?>     <?= $name === 'birthdate' ? 'type="date"' : '' ?>>
                 <?php endforeach; ?>
                 <select class="form-input" name="gender">
@@ -196,7 +196,7 @@ require __DIR__ . '/../../includes/header.php';
                             </div>
                             <button class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50" type="button" data-modal-close>Close</button>
                         </header>
-                        <form class="grid max-h-[70vh] gap-3 overflow-y-auto p-5 md:grid-cols-3" method="post" enctype="multipart/form-data" action="<?= project_url('app/ajax/athlete_ajax.php') ?>" data-ajax-form data-validate>
+                        <form class="grid max-h-[70vh] gap-3 overflow-y-auto p-5 md:grid-cols-3" method="post" enctype="multipart/form-data" action="<?= project_url('app/ajax/athlete_ajax.php') ?>" data-ajax-form data-validate data-athlete-address-form data-existing-address="<?= e($a['address'] ?? '') ?>">
                             <input type="hidden" name="id" value="<?= e((string)$a['id']) ?>">
                             <input type="hidden" name="user_id" value="<?= e((string)($a['user_id'] ?? '')) ?>">
                             <label class="block">
@@ -226,9 +226,30 @@ require __DIR__ . '/../../includes/header.php';
                                 <span class="text-sm font-semibold text-slate-700">Birthdate</span>
                                 <input class="form-input mt-1" type="date" name="birthdate" value="<?= e($a['birthdate'] ?? '') ?>">
                             </label>
+                            <div class="grid gap-3 md:col-span-3 md:grid-cols-3">
+                                <label class="block">
+                                    <span class="text-sm font-semibold text-slate-700">Province</span>
+                                    <select class="form-input mt-1" name="address_province" data-address-province required>
+                                        <option value="Isabela" selected>Isabela</option>
+                                    </select>
+                                </label>
+                                <label class="block">
+                                    <span class="text-sm font-semibold text-slate-700">Municipality / City</span>
+                                    <select class="form-input mt-1" name="address_municipality" data-address-municipality required>
+                                        <option value="">Loading municipalities...</option>
+                                    </select>
+                                </label>
+                                <label class="block">
+                                    <span class="text-sm font-semibold text-slate-700">Barangay</span>
+                                    <select class="form-input mt-1" name="address_barangay" data-address-barangay required disabled>
+                                        <option value="">Select municipality first</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <input type="hidden" name="address" data-address-combined value="<?= e($a['address'] ?? '') ?>">
                             <label class="block md:col-span-3">
                                 <span class="text-sm font-semibold text-slate-700">Address</span>
-                                <input class="form-input mt-1" name="address" value="<?= e($a['address'] ?? '') ?>">
+                                <input class="form-input mt-1 bg-slate-50 text-slate-600" data-address-preview readonly placeholder="Select barangay, municipality, and province" value="<?= e($a['address'] ?? '') ?>">
                             </label>
                             <label class="block">
                                 <span class="text-sm font-semibold text-slate-700">Course</span>
@@ -293,10 +314,6 @@ require __DIR__ . '/../../includes/header.php';
                                 </select>
                             </label>
                             <label class="block">
-                                <span class="text-sm font-semibold text-slate-700">Position</span>
-                                <input class="form-input mt-1" name="position" value="<?= e($a['position'] ?? '') ?>">
-                            </label>
-                            <label class="block">
                                 <span class="text-sm font-semibold text-slate-700">Athlete Status</span>
                                 <select class="form-input mt-1" name="athlete_status">
                                     <?php foreach (['Active', 'Inactive', 'Graduated', 'Injured'] as $status): ?>
@@ -315,4 +332,105 @@ require __DIR__ . '/../../includes/header.php';
             </div>
         <?php endforeach; ?>
         <?php endif; ?>
+        <script>
+        (() => {
+            const forms = Array.from(document.querySelectorAll('[data-athlete-address-form]'));
+            if (!forms.length) return;
+
+            const addressDataUrl = <?= json_encode(app_url('assets/data/isabela-addresses.json')) ?>;
+            let isabelaAddressData = null;
+
+            function resetOptions(select, placeholder) {
+                select.innerHTML = '';
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = placeholder;
+                select.appendChild(option);
+            }
+
+            function parseAddress(address) {
+                const parts = (address || '').split(',').map((part) => part.trim()).filter(Boolean);
+                return {
+                    barangay: parts[0] || '',
+                    municipality: parts[1] || '',
+                    province: parts[2] || 'Isabela',
+                };
+            }
+
+            function updateCombinedAddress(form) {
+                const province = form.querySelector('[data-address-province]');
+                const municipality = form.querySelector('[data-address-municipality]');
+                const barangay = form.querySelector('[data-address-barangay]');
+                const combined = form.querySelector('[data-address-combined]');
+                const preview = form.querySelector('[data-address-preview]');
+                const value = [barangay.value, municipality.value, province.value].filter(Boolean).join(', ');
+                combined.value = value;
+                preview.value = value;
+            }
+
+            function populateMunicipalities(form, selectedMunicipality = '') {
+                const municipalityField = form.querySelector('[data-address-municipality]');
+                resetOptions(municipalityField, 'Select municipality / city');
+                isabelaAddressData.municipalities.forEach((municipality) => {
+                    const option = document.createElement('option');
+                    option.value = municipality.name;
+                    option.textContent = municipality.name;
+                    option.dataset.code = municipality.code;
+                    option.selected = municipality.name === selectedMunicipality;
+                    municipalityField.appendChild(option);
+                });
+            }
+
+            function populateBarangays(form, selectedBarangay = '') {
+                const municipalityField = form.querySelector('[data-address-municipality]');
+                const barangayField = form.querySelector('[data-address-barangay]');
+                const municipality = isabelaAddressData?.municipalities.find((item) => item.name === municipalityField.value);
+                resetOptions(barangayField, municipality ? 'Select barangay' : 'Select municipality first');
+                barangayField.disabled = !municipality;
+
+                if (!municipality) {
+                    updateCombinedAddress(form);
+                    return;
+                }
+
+                municipality.barangays.forEach((barangay) => {
+                    const option = document.createElement('option');
+                    option.value = barangay.name;
+                    option.textContent = barangay.name;
+                    option.dataset.code = barangay.code;
+                    option.selected = barangay.name === selectedBarangay;
+                    barangayField.appendChild(option);
+                });
+                updateCombinedAddress(form);
+            }
+
+            function initForm(form) {
+                const parsed = parseAddress(form.dataset.existingAddress || '');
+                populateMunicipalities(form, parsed.municipality);
+                populateBarangays(form, parsed.barangay);
+                form.querySelector('[data-address-municipality]').addEventListener('change', () => populateBarangays(form));
+                form.querySelector('[data-address-barangay]').addEventListener('change', () => updateCombinedAddress(form));
+                form.querySelector('[data-address-province]').addEventListener('change', () => updateCombinedAddress(form));
+                form.addEventListener('submit', () => updateCombinedAddress(form));
+            }
+
+            fetch(addressDataUrl)
+                .then((response) => {
+                    if (!response.ok) throw new Error('Address data failed to load.');
+                    return response.json();
+                })
+                .then((data) => {
+                    isabelaAddressData = data;
+                    forms.forEach(initForm);
+                })
+                .catch(() => {
+                    forms.forEach((form) => {
+                        resetOptions(form.querySelector('[data-address-municipality]'), 'Unable to load municipalities');
+                        resetOptions(form.querySelector('[data-address-barangay]'), 'Unable to load barangays');
+                        form.querySelector('[data-address-municipality]').disabled = true;
+                        form.querySelector('[data-address-barangay]').disabled = true;
+                    });
+                });
+        })();
+        </script>
         <?php require __DIR__ . '/../../includes/footer.php'; ?>
