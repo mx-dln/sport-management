@@ -21,45 +21,22 @@ require __DIR__ . '/../app/includes/header.php';
             <p class="mt-1 text-sm text-slate-500">Athlete profiling, documents, schedules, reports, and SMS logs.</p>
         </div>
         <?php require __DIR__ . '/../app/includes/alerts.php'; ?>
-        <?php
-        $devLogins = [
-            ['label' => 'Admin', 'email' => 'admin@sports.test', 'password' => 'admin123'],
-            ['label' => 'Coach', 'email' => 'coach@sports.test', 'password' => 'admin123'],
-            ['label' => 'Athlete', 'email' => 'athlete@sports.test', 'password' => 'admin123'],
-        ];
-        ?>
         <form method="post" class="space-y-4" data-validate>
             <label class="block">
                 <span class="text-sm font-medium">Email</span>
-                <input id="login-email" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="email" name="email" required value="admin@sports.test">
+                <input id="login-email" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="email" name="email" required>
             </label>
             <label class="block">
                 <span class="text-sm font-medium">Password</span>
                 <div class="mt-1 flex overflow-hidden rounded-lg border border-slate-300 focus-within:border-blue-500">
-                    <input id="login-password" class="w-full border-0 px-3 py-2 focus:outline-none" type="password" name="password" required value="admin123" data-password-field>
+                    <input id="login-password" class="w-full border-0 px-3 py-2 focus:outline-none" type="password" name="password" required data-password-field>
                     <button class="border-l border-slate-300 px-3 text-sm font-semibold text-slate-600 hover:bg-slate-50" type="button" data-password-toggle>Show</button>
                 </div>
             </label>
             <button class="w-full rounded-lg px-4 py-2.5 font-semibold text-white" style="background: var(--theme-color);">Sign in</button>
-            <div class="border-t border-slate-200 pt-4">
-                <p class="mb-2 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">Development quick login</p>
-                <div class="grid gap-2 sm:grid-cols-3">
-                    <?php foreach ($devLogins as $login): ?>
-                        <button
-                            type="button"
-                            class="dev-login rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100"
-                            data-email="<?= e($login['email']) ?>"
-                            data-password="<?= e($login['password']) ?>"
-                        >
-                            <?= e($login['label']) ?>
-                        </button>
-                    <?php endforeach; ?>
-                </div>
-            </div>
         </form>
         <div class="mt-4 grid gap-3">
             <a class="block rounded-lg border border-slate-300 px-4 py-2.5 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50" href="<?= e(app_url('register.php')) ?>">Register as Athlete</a>
-            <p class="text-center text-xs text-slate-500">All demo accounts use password: admin123</p>
         </div>
     </section>
 </main>
@@ -189,7 +166,6 @@ require __DIR__ . '/../app/includes/header.php';
                         <h3 class="font-black text-slate-950">v1.0.0 - Registration and Core Setup</h3>
                         <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">May 17, 2026</p>
                         <ul class="mt-2 list-disc space-y-1 pl-5">
-                            <li>Added development quick login for Admin, Coach, and Athlete.</li>
                             <li>Added athlete registration wizard with account, biodata, and documents steps.</li>
                             <li>Added show password toggles and registration success notification page.</li>
                             <li>Added athlete edit profile and biodata completion support.</li>
@@ -203,14 +179,6 @@ require __DIR__ . '/../app/includes/header.php';
     </div>
 </div>
 <script>
-document.querySelectorAll('.dev-login').forEach((button) => {
-    button.addEventListener('click', () => {
-        document.getElementById('login-email').value = button.dataset.email;
-        document.getElementById('login-password').value = button.dataset.password;
-        button.closest('form').requestSubmit();
-    });
-});
-
 document.querySelectorAll('[data-password-toggle]').forEach((button) => {
     button.addEventListener('click', () => {
         const field = button.parentElement.querySelector('[data-password-field]');
