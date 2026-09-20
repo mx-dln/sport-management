@@ -49,6 +49,22 @@ class UserController
         return ['ok' => true, 'message' => 'User status updated.'];
     }
 
+    public function resetPassword(int $id, string $defaultPassword = 'password123'): array
+    {
+        if ($id === (int)(current_user()['id'] ?? 0)) {
+            return ['ok' => false, 'message' => 'You cannot reset your own password here.'];
+        }
+
+        $stmt = $this->pdo->prepare('UPDATE users SET password=? WHERE id=? AND role <> "admin"');
+        $stmt->execute([password_hash($defaultPassword, PASSWORD_DEFAULT), $id]);
+
+        if ($stmt->rowCount() < 1) {
+            return ['ok' => false, 'message' => 'Unable to reset password for this user.'];
+        }
+
+        return ['ok' => true, 'message' => 'User password reset to default: ' . $defaultPassword];
+    }
+
     public function delete(int $id): array
     {
         $stmt = $this->pdo->prepare('DELETE FROM users WHERE id=? AND id<>?');

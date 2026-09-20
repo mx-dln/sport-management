@@ -42,11 +42,18 @@ require __DIR__ . '/../../includes/header.php';
                             </select>
                         </td>
                         <td class="table-td text-right">
-                            <form class="inline-block" method="post" action="<?= project_url('app/ajax/user_ajax.php') ?>" data-ajax-form data-confirm="Delete this user account?">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="id" value="<?= e((string)$u['id']) ?>">
-                                <button class="rounded-lg border border-rose-200 px-3 py-2 text-sm font-bold text-rose-600 hover:bg-rose-50" type="submit">Delete</button>
-                            </form>
+                            <div class="flex justify-end gap-2">
+                                <form method="post" action="<?= project_url('app/ajax/user_ajax.php') ?>" data-ajax-form data-confirm="Reset this user password to the default password123?">
+                                    <input type="hidden" name="action" value="reset_password">
+                                    <input type="hidden" name="id" value="<?= e((string)$u['id']) ?>">
+                                    <button class="rounded-lg border border-amber-200 px-3 py-2 text-sm font-bold text-amber-700 hover:bg-amber-50" type="submit" data-loading-text="Resetting...">Reset Password</button>
+                                </form>
+                                <form method="post" action="<?= project_url('app/ajax/user_ajax.php') ?>" data-ajax-form data-confirm="Delete this user account?">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<?= e((string)$u['id']) ?>">
+                                    <button class="rounded-lg border border-rose-200 px-3 py-2 text-sm font-bold text-rose-600 hover:bg-rose-50" type="submit">Delete</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>

@@ -6,6 +6,7 @@ $action = $_POST['action'] ?? 'save';
 $result = match ($action) {
     'status' => $controller->status((int)$_POST['id'], $_POST['status']),
     'delete' => $controller->delete((int)$_POST['id']),
+    'reset_password' => $controller->resetPassword((int)$_POST['id']),
     default => $controller->save($_POST),
 };
 json_response($result);
