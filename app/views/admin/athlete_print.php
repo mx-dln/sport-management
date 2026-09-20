@@ -5,7 +5,12 @@ $pageTitle = 'Print Athlete Profile';
 $controller = new AthleteController($pdo);
 $athlete = $controller->find((int)($_GET['id'] ?? 0));
 if (!$athlete) exit('Athlete not found.');
-if ((current_user()['role'] ?? '') === 'athlete' && (int)($athlete['user_id'] ?? 0) !== (int)current_user()['id']) {
+$role = current_user()['role'] ?? '';
+if ($role === 'athlete' && (int)($athlete['user_id'] ?? 0) !== (int)current_user()['id']) {
+    http_response_code(403);
+    exit('Unauthorized access.');
+}
+if ($role === 'coach' && !$controller->canAccessAthlete((int)$athlete['id'])) {
     http_response_code(403);
     exit('Unauthorized access.');
 }

@@ -29,6 +29,10 @@ class AthleteController
             $where[] = '(a.student_id LIKE ? OR a.first_name LIKE ? OR a.last_name LIKE ?)';
             $params = array_merge($params, array_fill(0, 3, '%' . $filter['q'] . '%'));
         }
+        if ((current_user()['role'] ?? '') === 'coach') {
+            $where[] = 'EXISTS (SELECT 1 FROM team_members tmc JOIN teams tc ON tc.id=tmc.team_id WHERE tmc.athlete_id=a.id AND tc.coach_id=?)';
+            $params[] = current_user()['id'] ?? 0;
+        }
         $sql = 'SELECT a.*,
                        COALESCE(NULLIF(GROUP_CONCAT(DISTINCT s.name ORDER BY s.name SEPARATOR ", "), ""), ps.name) sport_name,
                        COALESCE(NULLIF(GROUP_CONCAT(DISTINCT t.name ORDER BY t.name SEPARATOR ", "), ""), pt.name) team_name
@@ -108,6 +112,48 @@ class AthleteController
         }
 
         return ['ok' => true, 'message' => 'Athlete profile saved.', 'reload' => true];
+    }
+
+    public function resetPassword(int $id, string $defaultPassword = 'password123'): array
+    {
+        $athlete = $this->find($id);
+        if (!$athlete) {
+            return ['ok' => false, 'message' => 'Athlete profile not found.'];
+        }
+
+        if (!$this->canAccessAthlete($id)) {
+            return ['ok' => false, 'message' => 'You are not allowed to reset this athlete password.'];
+        }
+
+        $userId = (int)($athlete['user_id'] ?? 0);
+        if ($userId <= 0) {
+            return ['ok' => false, 'message' => 'This athlete has no linked login account.'];
+        }
+
+        $stmt = $this->pdo->prepare("UPDATE users SET password=? WHERE id=? AND role='athlete'");
+        $stmt->execute([password_hash($defaultPassword, PASSWORD_DEFAULT), $userId]);
+
+        if ($stmt->rowCount() < 1) {
+            return ['ok' => false, 'message' => 'Unable to reset password for this athlete account.'];
+        }
+
+        return ['ok' => true, 'message' => 'Athlete password reset to default: ' . $defaultPassword];
+    }
+
+    public function canAccessAthlete(int $athleteId): bool
+    {
+        $role = current_user()['role'] ?? '';
+        if (in_array($role, ['admin', 'sports_coordinator'], true)) {
+            return true;
+        }
+
+        if ($role !== 'coach') {
+            return false;
+        }
+
+        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM team_members tm JOIN teams t ON t.id=tm.team_id WHERE tm.athlete_id=? AND t.coach_id=?');
+        $stmt->execute([$athleteId, current_user()['id'] ?? 0]);
+        return (int)$stmt->fetchColumn() > 0;
     }
 
     public function delete(int $id): array

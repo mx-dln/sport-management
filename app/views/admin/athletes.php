@@ -2,8 +2,10 @@
 require_once __DIR__ . '/../../controllers/AthleteController.php';
 require_once __DIR__ . '/../../controllers/SportController.php';
 require_once __DIR__ . '/../../controllers/TeamController.php';
-require_role(['admin', 'sports_coordinator']);
+require_role(['admin', 'sports_coordinator', 'coach']);
 $pageTitle = 'Athlete Profiles';
+$currentRole = current_user()['role'] ?? '';
+$canEditAthletes = in_array($currentRole, ['admin', 'sports_coordinator'], true);
 $athleteController = new AthleteController($pdo);
 $sports = (new SportController($pdo))->all();
 $teams = (new TeamController($pdo))->all();
@@ -133,12 +135,19 @@ require __DIR__ . '/../../includes/header.php';
                                 <td class="table-td text-right">
                                     <div class="flex justify-end gap-2">
                                         <a class="font-semibold text-blue-600" href="<?= e(app_url('index.php?page=athlete_print&id=' . $a['id'])) ?>">View Profile</a>
-                                        <button class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50" type="button" data-modal-open="#athlete-edit-modal-<?= e((string)$a['id']) ?>">Edit</button>
-                                        <form method="post" action="<?= project_url('app/ajax/athlete_ajax.php') ?>" data-ajax-form data-confirm="Delete this athlete? Documents, medical records, attendance, and competition entries will also be removed.">
-                                            <input type="hidden" name="action" value="delete">
+                                        <form method="post" action="<?= project_url('app/ajax/athlete_ajax.php') ?>" data-ajax-form data-confirm="Reset this athlete password to the default password123?">
+                                            <input type="hidden" name="action" value="reset_password">
                                             <input type="hidden" name="id" value="<?= e((string)$a['id']) ?>">
-                                            <button class="rounded-lg border border-rose-200 px-3 py-2 text-sm font-bold text-rose-600 hover:bg-rose-50" type="submit">Delete</button>
+                                            <button class="rounded-lg border border-amber-200 px-3 py-2 text-sm font-bold text-amber-700 hover:bg-amber-50" type="submit" data-loading-text="Resetting...">Reset Password</button>
                                         </form>
+                                        <?php if ($canEditAthletes): ?>
+                                            <button class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50" type="button" data-modal-open="#athlete-edit-modal-<?= e((string)$a['id']) ?>">Edit</button>
+                                            <form method="post" action="<?= project_url('app/ajax/athlete_ajax.php') ?>" data-ajax-form data-confirm="Delete this athlete? Documents, medical records, attendance, and competition entries will also be removed.">
+                                                <input type="hidden" name="action" value="delete">
+                                                <input type="hidden" name="id" value="<?= e((string)$a['id']) ?>">
+                                                <button class="rounded-lg border border-rose-200 px-3 py-2 text-sm font-bold text-rose-600 hover:bg-rose-50" type="submit">Delete</button>
+                                            </form>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                             </tr>
@@ -174,6 +183,7 @@ require __DIR__ . '/../../includes/header.php';
             <?php endif; ?>
         </section>
 
+        <?php if ($canEditAthletes): ?>
         <?php foreach ($pagedAthletes as $a): ?>
             <div id="athlete-edit-modal-<?= e((string)$a['id']) ?>" class="fixed inset-0 z-[70] hidden bg-slate-950/60 p-4 backdrop-blur-sm" data-modal>
                 <div class="mx-auto flex min-h-full max-w-3xl items-center">
@@ -304,4 +314,5 @@ require __DIR__ . '/../../includes/header.php';
                 </div>
             </div>
         <?php endforeach; ?>
+        <?php endif; ?>
         <?php require __DIR__ . '/../../includes/footer.php'; ?>

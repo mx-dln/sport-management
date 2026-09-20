@@ -74,6 +74,7 @@ $groups = [
             ['Dashboard', 'dashboard.php', 'dashboard'],
         ],
         'Records' => [
+            ['Athletes', 'athletes.php', 'athletes'],
             ['My Teams', 'teams.php', 'teams'],
             ['Schedules', 'schedules.php', 'schedules'],
             ['Attendance', 'attendance.php', 'attendance'],

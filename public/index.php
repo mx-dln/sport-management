@@ -45,6 +45,8 @@ $routes = [
     ],
     'coach' => [
         'dashboard' => 'coach/dashboard.php',
+        'athletes' => 'admin/athletes.php',
+        'athlete_print' => 'admin/athlete_print.php',
         'teams' => 'coach/teams.php',
         'schedules' => 'coach/schedules.php',
         'attendance' => 'coach/attendance.php',

@@ -8,7 +8,17 @@ if ($action === 'delete') {
     json_response($controller->delete((int)($_POST['id'] ?? 0)));
 }
 
+if ($action === 'reset_password') {
+    require_role(['admin', 'sports_coordinator', 'coach']);
+    json_response($controller->resetPassword((int)($_POST['id'] ?? 0)));
+}
+
 $user = current_user();
+if (in_array($user['role'] ?? '', ['admin', 'sports_coordinator'], true)) {
+    $result = $controller->save($_POST, $_FILES['profile_photo'] ?? null);
+    json_response($result);
+}
+
 if (($user['role'] ?? '') === 'athlete') {
     $stmt = $pdo->prepare('SELECT id FROM athletes WHERE user_id=? LIMIT 1');
     $stmt->execute([$user['id']]);
@@ -21,6 +31,8 @@ if (($user['role'] ?? '') === 'athlete') {
     $_POST['user_id'] = (string)$user['id'];
     $_POST['athlete_status'] = 'Active';
     unset($_POST['team_id']);
+    $result = $controller->save($_POST, $_FILES['profile_photo'] ?? null);
+    json_response($result);
 }
-$result = $controller->save($_POST, $_FILES['profile_photo'] ?? null);
-json_response($result);
+
+json_response(['ok' => false, 'message' => 'This action is not allowed.'], 403);
