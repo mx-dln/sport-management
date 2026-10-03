@@ -105,7 +105,7 @@ require __DIR__ . '/../../includes/header.php';
 <!-- Quick Navigation Cards -->
 <section class="no-print mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
     <?php foreach ($reportCards as $card): ?>
-        <a class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800 dark:bg-slate-900" href="#<?= e($card['target']) ?>">
+        <a class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800 dark:bg-slate-900" href="#<?= e($card['target']) ?>" data-report-open="<?= e($card['target']) ?>">
             <div class="flex items-start justify-between gap-2">
                 <div>
                     <p class="text-xs font-semibold text-slate-500 truncate"><?= e($card['title']) ?></p>
@@ -139,6 +139,46 @@ require __DIR__ . '/../../includes/header.php';
     <button class="btn-primary">Apply Filters</button>
 </form>
 
+
+<style>
+[data-report-header] {
+    cursor: pointer;
+}
+.report-section.is-collapsed [data-report-body],
+.report-section.is-collapsed > .data-table-toolbar,
+.report-section.is-collapsed > .data-table-pager {
+    display: none !important;
+}
+.report-section-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 9999px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+html.dark .report-section-toggle {
+    background: #1e3a8a55;
+    color: #bfdbfe;
+}
+.report-section.is-collapsed .report-section-toggle-icon {
+    transform: rotate(-90deg);
+}
+.report-section-toggle-icon {
+    transition: transform 0.16s ease;
+}
+@media print {
+    .report-section.is-collapsed [data-report-body],
+    .report-section.is-collapsed > .data-table-toolbar,
+    .report-section.is-collapsed > .data-table-pager {
+        display: block !important;
+    }
+}
+</style>
+
 <section class="print-card mt-6 space-y-8">
     <!-- Printable Letterhead -->
     <div class="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
@@ -148,8 +188,8 @@ require __DIR__ . '/../../includes/header.php';
     </div>
 
     <!-- ================= 1. ATHLETE MASTER LIST ================= -->
-    <article id="athlete-report" class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <div class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
+    <article id="athlete-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div data-report-header class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
             <div>
                 <h2 class="text-lg font-bold text-slate-950 dark:text-white">Athlete Master List</h2>
                 <p class="text-sm text-slate-500">Official master list of registered athletes with sport and team assignments.</p>
@@ -160,7 +200,7 @@ require __DIR__ . '/../../includes/header.php';
                 <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300"><?= e((string)count($athletes)) ?> records</span>
             </div>
         </div>
-        <div class="overflow-x-auto">
+        <div data-report-body class="overflow-x-auto">
             <table id="athlete-report-table" class="w-full text-sm" data-enhance-table="true">
                 <thead class="bg-slate-50 dark:bg-slate-800">
                     <tr>
@@ -189,8 +229,8 @@ require __DIR__ . '/../../includes/header.php';
     </article>
 
     <!-- ================= 2. MASTER LIST OF COACHES (PRINT COACHES) ================= -->
-    <article id="coach-report" class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <div class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
+    <article id="coach-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div data-report-header class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
             <div>
                 <h2 class="text-lg font-bold text-slate-950 dark:text-white">Master List of Coaches</h2>
                 <p class="text-sm text-slate-500">Official roster of appointed athletic coaches, contact info, assigned sports, and teams.</p>
@@ -205,7 +245,7 @@ require __DIR__ . '/../../includes/header.php';
                 <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300"><?= e((string)count($coaches)) ?> coaches</span>
             </div>
         </div>
-        <div class="overflow-x-auto">
+        <div data-report-body class="overflow-x-auto">
             <table id="coach-report-table" class="w-full text-sm" data-enhance-table="true">
                 <thead class="bg-slate-50 dark:bg-slate-800">
                     <tr>
@@ -241,8 +281,8 @@ require __DIR__ . '/../../includes/header.php';
     </article>
 
     <!-- ================= 3. MASTERLIST PER SPORT (GENERATE REPORTS, PRINTABLE, SCAN/UPLOAD) ================= -->
-    <article id="sport-masterlist-report" class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <div class="flex flex-col gap-4 border-b border-slate-100 p-5 md:flex-row md:items-center md:justify-between dark:border-slate-800">
+    <article id="sport-masterlist-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div data-report-header class="flex flex-col gap-4 border-b border-slate-100 p-5 md:flex-row md:items-center md:justify-between dark:border-slate-800">
             <div>
                 <div class="flex items-center gap-2">
                     <span class="rounded bg-blue-600 px-2 py-0.5 text-xs font-black uppercase text-white">Per Sport</span>
@@ -268,7 +308,7 @@ require __DIR__ . '/../../includes/header.php';
             </div>
         </div>
 
-        <div class="overflow-x-auto">
+        <div data-report-body class="overflow-x-auto">
             <table id="sport-masterlist-table" class="w-full text-sm" data-enhance-table="true">
                 <thead class="bg-slate-50 dark:bg-slate-800">
                     <tr>
@@ -330,8 +370,8 @@ require __DIR__ . '/../../includes/header.php';
     </article>
 
     <!-- ================= 4. TRAINING SCHEDULE REPORT ================= -->
-    <article id="schedule-report" class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <div class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
+    <article id="schedule-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div data-report-header class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
             <div>
                 <h2 class="text-lg font-bold text-slate-950 dark:text-white">Training Schedule Report</h2>
                 <p class="text-sm text-slate-500">Training calendar, teams, venues, and current schedule status.</p>
@@ -342,7 +382,7 @@ require __DIR__ . '/../../includes/header.php';
                 <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300"><?= e((string)count($schedules)) ?> schedules</span>
             </div>
         </div>
-        <div class="overflow-x-auto">
+        <div data-report-body class="overflow-x-auto">
             <table id="schedule-report-table" class="w-full text-sm" data-enhance-table="true">
                 <thead class="bg-slate-50 dark:bg-slate-800">
                     <tr><th class="table-th">Date</th><th class="table-th">Time</th><th class="table-th">Team</th><th class="table-th">Sport</th><th class="table-th">Venue</th><th class="table-th">Status</th></tr>
@@ -364,8 +404,8 @@ require __DIR__ . '/../../includes/header.php';
     </article>
 
     <!-- ================= 5. MISSING REQUIREMENTS REPORT ================= -->
-    <article id="missing-report" class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <div class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
+    <article id="missing-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div data-report-header class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
             <div>
                 <h2 class="text-lg font-bold text-slate-950 dark:text-white">Missing Requirements Report</h2>
                 <p class="text-sm text-slate-500">Required documents (Birth Certificate, COG, Medical, etc.) still pending submission.</p>
@@ -376,7 +416,7 @@ require __DIR__ . '/../../includes/header.php';
                 <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300"><?= e((string)count($missing)) ?> missing</span>
             </div>
         </div>
-        <div class="overflow-x-auto">
+        <div data-report-body class="overflow-x-auto">
             <table id="missing-report-table" class="w-full text-sm" data-enhance-table="true">
                 <thead class="bg-slate-50 dark:bg-slate-800">
                     <tr><th class="table-th">Student ID</th><th class="table-th">Athlete Name</th><th class="table-th">Pending Requirement</th><th class="table-th text-right">Action</th></tr>
@@ -398,8 +438,8 @@ require __DIR__ . '/../../includes/header.php';
     </article>
 
     <!-- ================= 6. ATHLETIC HISTORY & ACHIEVEMENTS ================= -->
-    <article id="history-report" class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <div class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
+    <article id="history-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div data-report-header class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
             <div>
                 <h2 class="text-lg font-bold text-slate-950 dark:text-white">Athletic History &amp; Achievements</h2>
                 <p class="text-sm text-slate-500">Athletes with competition experience, medals tally, and provincial/regional/national achievements.</p>
@@ -410,7 +450,7 @@ require __DIR__ . '/../../includes/header.php';
                 <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300"><?= e((string)count($historyRecords)) ?> entries</span>
             </div>
         </div>
-        <div class="overflow-x-auto">
+        <div data-report-body class="overflow-x-auto">
             <table id="history-achievements-table" class="w-full text-sm" data-enhance-table="true">
                 <thead class="bg-slate-50 dark:bg-slate-800">
                     <tr><th class="table-th">Student ID</th><th class="table-th">Athlete</th><th class="table-th">Competitions</th><th class="table-th">Gold</th><th class="table-th">Silver</th><th class="table-th">Bronze</th><th class="table-th">Total Medals</th><th class="table-th">Top Level</th></tr>
@@ -434,8 +474,8 @@ require __DIR__ . '/../../includes/header.php';
     </article>
 
     <!-- ================= 7. SMS LOGS REPORT ================= -->
-    <article id="sms-report" class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <div class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
+    <article id="sms-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div data-report-header class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
             <div>
                 <h2 class="text-lg font-bold text-slate-950 dark:text-white">SMS Logs Report</h2>
                 <p class="text-sm text-slate-500">Communication history sent or logged by the sports management system.</p>
@@ -446,7 +486,7 @@ require __DIR__ . '/../../includes/header.php';
                 <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300"><?= e((string)count($sms)) ?> logs</span>
             </div>
         </div>
-        <div class="overflow-x-auto">
+        <div data-report-body class="overflow-x-auto">
             <table id="sms-report-table" class="w-full text-sm" data-enhance-table="true">
                 <thead class="bg-slate-50 dark:bg-slate-800">
                     <tr><th class="table-th">Recipient</th><th class="table-th">Phone (11 Digits)</th><th class="table-th">Message</th><th class="table-th">Status</th><th class="table-th">Date</th></tr>
@@ -469,4 +509,69 @@ require __DIR__ . '/../../includes/header.php';
 
 </main>
 </div>
+
+<script>
+(() => {
+    const updateReportLabel = (section) => {
+        const label = section.querySelector('[data-report-toggle-label]');
+        if (label) label.textContent = section.classList.contains('is-collapsed') ? 'Show table' : 'Hide table';
+    };
+
+    const toggleReportSection = (section, forceOpen = null) => {
+        if (!section) return;
+        if (forceOpen === true) {
+            section.classList.remove('is-collapsed');
+        } else if (forceOpen === false) {
+            section.classList.add('is-collapsed');
+        } else {
+            section.classList.toggle('is-collapsed');
+        }
+        updateReportLabel(section);
+    };
+
+    const initReportAccordions = () => {
+        document.querySelectorAll('[data-report-section]').forEach((section) => {
+            const header = section.querySelector('[data-report-header]');
+            const actions = header?.querySelector('.no-print');
+            if (actions && !actions.querySelector('[data-report-toggle]')) {
+                const toggle = document.createElement('button');
+                toggle.type = 'button';
+                toggle.className = 'report-section-toggle';
+                toggle.dataset.reportToggle = section.id;
+                toggle.innerHTML = '<span class="report-section-toggle-icon">⌄</span><span data-report-toggle-label>Show table</span>';
+                actions.prepend(toggle);
+            }
+            updateReportLabel(section);
+        });
+    };
+
+    initReportAccordions();
+    document.addEventListener('DOMContentLoaded', initReportAccordions);
+
+    document.addEventListener('click', (event) => {
+        const card = event.target.closest('[data-report-open]');
+        if (card) {
+            event.preventDefault();
+            const section = document.getElementById(card.dataset.reportOpen);
+            toggleReportSection(section, true);
+            section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+        }
+
+        const toggle = event.target.closest('[data-report-toggle]');
+        if (toggle) {
+            event.preventDefault();
+            event.stopPropagation();
+            toggleReportSection(document.getElementById(toggle.dataset.reportToggle));
+            return;
+        }
+
+        const header = event.target.closest('[data-report-header]');
+        if (header && !event.target.closest('button, a, select, input, textarea')) {
+            toggleReportSection(header.closest('[data-report-section]'));
+        }
+    });
+})();
+</script>
+
 <?php require __DIR__ . '/../../includes/footer.php'; ?>

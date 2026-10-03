@@ -259,10 +259,13 @@ function initEnhancedTables() {
 
         table.dataset.enhanced = 'true';
         const container = table.closest('.overflow-x-auto') || table.parentElement;
-        const card = container?.parentElement?.classList.contains('rounded-xl') || container?.parentElement?.classList.contains('rounded-2xl')
+        const reportBody = table.closest('[data-report-body]');
+        const card = reportBody || (container?.parentElement?.classList.contains('rounded-xl') || container?.parentElement?.classList.contains('rounded-2xl')
             ? container.parentElement
-            : container;
-        const title = card?.querySelector('h2, .font-bold')?.textContent?.trim() || 'Table';
+            : container);
+        const title = reportBody
+            ? reportBody.closest('[data-report-section]')?.querySelector('[data-report-header] h2')?.textContent?.trim() || 'Table'
+            : card?.querySelector('h2, .font-bold')?.textContent?.trim() || 'Table';
 
         const toolbar = document.createElement('div');
         toolbar.className = 'data-table-toolbar no-print flex flex-col gap-3 border-b border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800 dark:bg-slate-900';
