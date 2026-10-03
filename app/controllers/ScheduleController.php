@@ -43,6 +43,15 @@ class ScheduleController
     public function save(array $d, bool $notify = true): array
     {
         $id = (int)($d['id'] ?? 0);
+        if ((current_user()['role'] ?? '') === 'coach') {
+            $coachId = (int)(current_user()['id'] ?? 0);
+            $d['coach_id'] = $coachId;
+            $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM teams t JOIN coach_sports cs ON cs.sport_id=t.sport_id AND cs.coach_id=? WHERE t.id=? AND t.coach_id=? AND t.sport_id=?');
+            $stmt->execute([$coachId, (int)($d['team_id'] ?? 0), $coachId, (int)($d['sport_id'] ?? 0)]);
+            if ((int)$stmt->fetchColumn() === 0) {
+                throw new RuntimeException('You can only schedule teams under your delegated sports.');
+            }
+        }
         if ($id) {
             $this->assertScheduleAccess($id);
             $stmt = $this->pdo->prepare('UPDATE training_schedules SET sport_id=?,team_id=?,coach_id=?,training_date=?,start_time=?,end_time=?,venue=?,description=?,status=? WHERE id=?');

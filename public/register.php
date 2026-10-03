@@ -32,7 +32,7 @@ require __DIR__ . '/../app/includes/header.php';
         </div>
         <div class="mb-4 mt-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold text-slate-600">
             <span>Fields marked with <span class="font-bold text-rose-600">*</span> are mandatory</span>
-            <span class="text-blue-600 font-bold">11-digit mobile numbers only (09XXXXXXXXX)</span>
+            <span class="text-blue-600 font-bold">11-digit mobile numbers only (example: 0912 3456 789)</span>
         </div>
         <form method="post" enctype="multipart/form-data" data-validate id="athlete-register-form">
             <input type="hidden" name="auth_action" value="register_athlete">
@@ -63,19 +63,19 @@ require __DIR__ . '/../app/includes/header.php';
             <section class="register-step hidden grid gap-3 sm:grid-cols-2" data-step="2">
                 <label class="block">
                     <span class="text-sm font-semibold text-slate-700">First Name <span class="text-rose-600 font-bold">*</span></span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="first_name" pattern="[A-Za-z .'-]+" title="Use letters only. Spaces, hyphens, apostrophes, and periods are allowed." required>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="first_name" pattern="[A-Za-z ]+" title="Use letters and spaces only." data-name-only required>
                 </label>
                 <label class="block">
                     <span class="text-sm font-semibold text-slate-700">Last Name <span class="text-rose-600 font-bold">*</span></span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="last_name" pattern="[A-Za-z .'-]+" title="Use letters only. Spaces, hyphens, apostrophes, and periods are allowed." required>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="last_name" pattern="[A-Za-z ]+" title="Use letters and spaces only." data-name-only required>
                 </label>
                 <label class="block">
                     <span class="text-sm font-semibold text-slate-700">Middle Name <span class="text-xs font-normal text-slate-400">(Optional)</span></span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="middle_name" pattern="[A-Za-z .'-]+" title="Use letters only. Spaces, hyphens, apostrophes, and periods are allowed.">
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="middle_name" pattern="[A-Za-z ]+" title="Use letters and spaces only." data-name-only>
                 </label>
                 <label class="block">
                     <span class="text-sm font-semibold text-slate-700">Contact Number (11 Digits) <span class="text-rose-600 font-bold">*</span></span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="tel" name="contact_number" placeholder="09XXXXXXXXX" pattern="09[0-9]{9}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" title="Must be exactly 11 digits starting with 09 (e.g. 09171234567)" data-phone-11 required>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="tel" name="contact_number" placeholder="0912 3456 789" pattern="[0-9]{11}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" title="Must be exactly 11 digits (e.g. 0912 3456 789)" data-phone-11 required>
                 </label>
                 <label class="block">
                     <span class="text-sm font-semibold text-slate-700">Gender <span class="text-rose-600 font-bold">*</span></span>
@@ -114,11 +114,11 @@ require __DIR__ . '/../app/includes/header.php';
                 </label>
                 <label class="block">
                     <span class="text-sm font-semibold text-slate-700">Guardian Contact (11 Digits) <span class="text-rose-600 font-bold">*</span></span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="tel" name="guardian_contact" placeholder="09XXXXXXXXX" pattern="09[0-9]{9}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" title="Must be exactly 11 digits starting with 09 (e.g. 09171234567)" data-phone-11 required>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="tel" name="guardian_contact" placeholder="0912 3456 789" pattern="[0-9]{11}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" title="Must be exactly 11 digits (e.g. 0912 3456 789)" data-phone-11 required>
                 </label>
                 <label class="block">
                     <span class="text-sm font-semibold text-slate-700">Emergency Contact (11 Digits) <span class="text-rose-600 font-bold">*</span></span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="tel" name="emergency_contact" placeholder="09XXXXXXXXX" pattern="09[0-9]{9}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" title="Must be exactly 11 digits starting with 09 (e.g. 09171234567)" data-phone-11 required>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="tel" name="emergency_contact" placeholder="0912 3456 789" pattern="[0-9]{11}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" title="Must be exactly 11 digits (e.g. 0912 3456 789)" data-phone-11 required>
                 </label>
                 <label class="block">
                     <span class="text-sm font-semibold text-slate-700">Height <span class="text-rose-600 font-bold">*</span></span>
@@ -223,6 +223,18 @@ const barangayField = document.querySelector('[data-address-barangay]');
 const combinedAddressField = document.querySelector('[data-address-combined]');
 const addressPreview = document.querySelector('[data-address-preview]');
 
+
+function markRequiredRegisterFields() {
+    document.querySelectorAll('#athlete-register-form [required]').forEach((field) => {
+        if (field.type === 'hidden') return;
+        const label = field.closest('label');
+        if (!label || label.querySelector('[data-required-marker], .text-rose-600')) return;
+        const caption = label.querySelector('span.text-sm, span.flex, span');
+        if (!caption) return;
+        caption.insertAdjacentHTML('beforeend', ' <span class="text-rose-600 font-bold" data-required-marker>*</span>');
+    });
+}
+
 function showRegisterStep(step) {
     registerStep = Math.max(1, Math.min(3, step));
     document.querySelectorAll('.register-step').forEach((panel) => {
@@ -317,6 +329,16 @@ function currentStepIsValid() {
     return Array.from(fields).every((field) => field.reportValidity());
 }
 
+
+document.addEventListener('input', (event) => {
+    const input = event.target;
+    if (!input || !input.matches('[data-name-only]')) return;
+    const cleaned = input.value.replace(/[^A-Za-z ]+/g, '').replace(/\s{2,}/g, ' ');
+    if (input.value !== cleaned) {
+        input.value = cleaned;
+    }
+});
+
 document.querySelector('[name="password"]').addEventListener('input', validatePasswordConfirmation);
 document.querySelector('[name="confirm_password"]').addEventListener('input', validatePasswordConfirmation);
 municipalityField.addEventListener('change', populateBarangays);
@@ -334,6 +356,7 @@ document.querySelectorAll('.register-step-tab').forEach((tab) => {
         if (target < registerStep || currentStepIsValid()) showRegisterStep(target);
     });
 });
+markRequiredRegisterFields();
 showRegisterStep(1);
 loadAddressData();
 

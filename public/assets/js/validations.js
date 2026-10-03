@@ -30,10 +30,10 @@ document.addEventListener('submit', (event) => {
     for (const phoneInput of phoneInputs) {
         const val = phoneInput.value.trim();
         if (val) {
-            if (!/^09\d{9}$/.test(val)) {
+            if (!/^\d{11}$/.test(val)) {
                 event.preventDefault();
                 phoneInput.focus();
-                const msg = 'Phone number must be exactly 11 digits starting with 09 (e.g., 09171234567).';
+                const msg = 'Phone number must be exactly 11 digits (e.g., 0912 3456 789).';
                 if (typeof showAlert === 'function') {
                     showAlert(msg, 'error');
                 } else {

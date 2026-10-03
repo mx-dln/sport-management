@@ -7,7 +7,7 @@ $stmt = $pdo->prepare('SELECT * FROM athletes WHERE user_id=? LIMIT 1');
 $stmt->execute([current_user()['id']]);
 $athlete = $stmt->fetch();
 $docs = new DocumentController($pdo);
-$requirements = $docs->requirements();
+$requirements = $docs->requirements(!empty($athlete['sport_id']) ? (int)$athlete['sport_id'] : null);
 $myDocs = $athlete ? (new AthleteController($pdo))->documents((int)$athlete['id']) : [];
 
 $docsById = [];

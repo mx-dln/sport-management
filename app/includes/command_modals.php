@@ -3,7 +3,20 @@ $cmdUser = current_user();
 $cmdRole = $cmdUser['role'] ?? '';
 $cmdSports = $pdo->query("SELECT id, name FROM sports WHERE status='active' ORDER BY name")->fetchAll();
 $cmdTeams = $pdo->query("SELECT id, name, sport_id FROM teams WHERE status='active' ORDER BY name")->fetchAll();
-$cmdReqTypes = $pdo->query("SELECT id, title, is_required FROM requirement_types ORDER BY is_required DESC, title")->fetchAll();
+$cmdAthleteSportId = null;
+if ($cmdRole === 'athlete') {
+    $stmt = $pdo->prepare("SELECT sport_id FROM athletes WHERE user_id=? LIMIT 1");
+    $stmt->execute([$cmdUser['id'] ?? 0]);
+    $sportValue = $stmt->fetchColumn();
+    $cmdAthleteSportId = $sportValue !== false && $sportValue !== null ? (int)$sportValue : null;
+}
+if ($cmdAthleteSportId) {
+    $stmt = $pdo->prepare("SELECT rt.id, rt.title, rt.is_required, s.name sport_name FROM requirement_types rt LEFT JOIN sports s ON s.id=rt.sport_id WHERE rt.sport_id IS NULL OR rt.sport_id=? ORDER BY rt.is_required DESC, COALESCE(s.name, 'All Sports'), rt.title");
+    $stmt->execute([$cmdAthleteSportId]);
+    $cmdReqTypes = $stmt->fetchAll();
+} else {
+    $cmdReqTypes = $pdo->query("SELECT rt.id, rt.title, rt.is_required, s.name sport_name FROM requirement_types rt LEFT JOIN sports s ON s.id=rt.sport_id ORDER BY rt.is_required DESC, COALESCE(s.name, 'All Sports'), rt.title")->fetchAll();
+}
 $cmdAthletes = [];
 if (in_array($cmdRole, ['admin', 'sports_coordinator', 'coach'], true)) {
     $cmdAthletes = $pdo->query("SELECT id, student_id, first_name, last_name FROM athletes ORDER BY last_name, first_name")->fetchAll();
@@ -117,7 +130,7 @@ if (in_array($cmdRole, ['admin', 'sports_coordinator', 'coach'], true)) {
                     <select id="scan-requirement-select" class="form-input mt-1 w-full" name="requirement_type_id" required>
                         <option value="">Select Document Requirement</option>
                         <?php foreach ($cmdReqTypes as $r): ?>
-                            <option value="<?= e((string)$r['id']) ?>"><?= e($r['title']) ?><?= $r['is_required'] ? ' (* Mandatory)' : '' ?></option>
+                            <option value="<?= e((string)$r['id']) ?>"><?= e($r['title']) ?><?= !empty($r['sport_name']) ? ' — ' . e($r['sport_name']) : '' ?><?= $r['is_required'] ? ' (* Mandatory)' : '' ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

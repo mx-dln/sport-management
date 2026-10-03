@@ -5,6 +5,7 @@ require_role(['admin', 'sports_coordinator']);
 $pageTitle = 'Requirement Documents';
 $docs = new DocumentController($pdo);
 $requirements = $docs->requirements();
+$sports = $docs->sports();
 $uploads = $docs->uploads();
 $athletes = (new AthleteController($pdo))->all();
 $uploadsByAthlete = [];
@@ -36,11 +37,11 @@ require __DIR__ . '/../../includes/header.php';
 
 <div class="grid gap-6 xl:grid-cols-2">
 <form class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm" method="post" action="<?= project_url('app/ajax/document_ajax.php') ?>" data-ajax-form>
-<input type="hidden" name="action" value="requirement"><h2 class="mb-4 font-bold">Define Requirement</h2><input class="form-input mb-3" name="title" placeholder="Document title *" required><textarea class="form-input mb-3" name="description" placeholder="Description"></textarea><label class="mb-4 flex gap-2 text-sm"><input type="checkbox" name="is_required" checked> Required</label><button class="btn-primary">Save Requirement</button></form>
+<input type="hidden" name="action" value="requirement"><h2 class="mb-4 font-bold">Define Requirement</h2><input class="form-input mb-3" name="title" placeholder="Document title *" required><textarea class="form-input mb-3" name="description" placeholder="Description"></textarea><select class="form-input mb-3" name="sport_id"><option value="">All Sports / Initial</option><?php foreach ($sports as $sport): ?><option value="<?= e((string)$sport['id']) ?>"><?= e($sport['name']) ?></option><?php endforeach; ?></select><label class="mb-2 flex gap-2 text-sm"><input type="checkbox" name="is_required" checked> Required</label><label class="mb-4 flex gap-2 text-sm"><input type="checkbox" name="registration_initial"> Show during athlete registration</label><button class="btn-primary">Save Requirement</button></form>
 <form class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm" method="post" enctype="multipart/form-data" action="<?= project_url('app/ajax/document_ajax.php') ?>" data-ajax-form>
 <input type="hidden" name="action" value="upload_document"><h2 class="mb-4 font-bold">Upload Athlete Document</h2>
 <select class="form-input mb-3" name="athlete_id" required><option value="">Athlete</option><?php foreach ($athletes as $a): ?><option value="<?= e($a['id']) ?>"><?= e($a['last_name'] . ', ' . $a['first_name']) ?></option><?php endforeach; ?></select>
-<select class="form-input mb-3" name="requirement_type_id" required><option value="">Requirement</option><?php foreach ($requirements as $r): ?><option value="<?= e($r['id']) ?>"><?= e($r['title']) ?></option><?php endforeach; ?></select>
+<select class="form-input mb-3" name="requirement_type_id" required><option value="">Requirement</option><?php foreach ($requirements as $r): ?><option value="<?= e($r['id']) ?>"><?= e($r['title']) ?><?= $r['sport_name'] ? ' — ' . e($r['sport_name']) : '' ?></option><?php endforeach; ?></select>
 <input class="form-input mb-3" type="file" name="document_file" accept=".pdf,.jpg,.jpeg,.png" required><button class="btn-primary">Upload</button></form>
 </div>
 <section class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -62,7 +63,9 @@ require __DIR__ . '/../../includes/header.php';
                 <tr>
                     <th class="table-th">Requirement</th>
                     <th class="table-th">Description</th>
+                    <th class="table-th">Sport Scope</th>
                     <th class="table-th">Type</th>
+                    <th class="table-th">Registration</th>
                     <th class="table-th">Created</th>
                     <th class="table-th">Action</th>
                 </tr>
@@ -72,11 +75,13 @@ require __DIR__ . '/../../includes/header.php';
                     <tr>
                         <td class="table-td font-semibold"><?= e($requirement['title']) ?></td>
                         <td class="table-td"><?= e($requirement['description'] ?: 'No description') ?></td>
+                        <td class="table-td"><?= e($requirement['sport_name'] ?: 'All Sports') ?></td>
                         <td class="table-td">
                             <span class="status-pill <?= !empty($requirement['is_required']) ? 'status-submitted' : 'status-neutral' ?>">
                                 <?= !empty($requirement['is_required']) ? 'Required' : 'Optional' ?>
                             </span>
                         </td>
+                        <td class="table-td"><?= !empty($requirement['registration_initial']) ? 'Initial Upload' : 'After Registration' ?></td>
                         <td class="table-td text-slate-500"><?= e(format_datetime_12($requirement['created_at'] ?? '')) ?></td>
                         <td class="table-td">
                             <div class="flex flex-wrap gap-2">
@@ -92,7 +97,7 @@ require __DIR__ . '/../../includes/header.php';
                 <?php endforeach; ?>
                 <?php if (!$requirements): ?>
                     <tr>
-                        <td class="table-td text-center text-slate-500" colspan="5">No requirements defined yet.</td>
+                        <td class="table-td text-center text-slate-500" colspan="7">No requirements defined yet.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -122,9 +127,22 @@ require __DIR__ . '/../../includes/header.php';
                         <span class="text-sm font-semibold text-slate-700">Description</span>
                         <textarea class="form-input mt-1" name="description" rows="3"><?= e($requirement['description'] ?? '') ?></textarea>
                     </label>
+                    <label class="block">
+                        <span class="text-sm font-semibold text-slate-700">Sport Scope</span>
+                        <select class="form-input mt-1" name="sport_id">
+                            <option value="">All Sports / Initial</option>
+                            <?php foreach ($sports as $sport): ?>
+                                <option value="<?= e((string)$sport['id']) ?>" <?= (string)($requirement['sport_id'] ?? '') === (string)$sport['id'] ? 'selected' : '' ?>><?= e($sport['name']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
                     <label class="flex items-center gap-2 text-sm font-semibold text-slate-700">
                         <input type="checkbox" name="is_required" <?= !empty($requirement['is_required']) ? 'checked' : '' ?>>
                         Required document
+                    </label>
+                    <label class="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                        <input type="checkbox" name="registration_initial" <?= !empty($requirement['registration_initial']) ? 'checked' : '' ?>>
+                        Show during athlete registration
                     </label>
                     <button class="btn-primary">Save Changes</button>
                 </form>
@@ -181,7 +199,7 @@ require __DIR__ . '/../../includes/header.php';
                 <?php endforeach; ?>
                 <?php if (!$uploadsByAthlete): ?>
                     <tr>
-                        <td class="table-td text-center text-slate-500" colspan="5">No uploaded documents yet.</td>
+                        <td class="table-td text-center text-slate-500" colspan="7">No uploaded documents yet.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

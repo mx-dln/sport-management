@@ -828,7 +828,7 @@ html.dark .smis-scrollbar {
 .smis-marquee-track {
     display: inline-flex;
     width: max-content;
-    animation: smis-marquee 35s linear infinite;
+    animation: smis-marquee 24s linear infinite;
 }
 .smis-marquee-track:hover {
     animation-play-state: paused;

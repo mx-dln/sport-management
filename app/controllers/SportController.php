@@ -6,8 +6,27 @@ require_once __DIR__ . '/../helpers/auth.php';
 
 class SportController
 {
-    public function __construct(private PDO $pdo) {}
-    public function all(): array { return $this->pdo->query('SELECT * FROM sports ORDER BY name')->fetchAll(); }
+    public function __construct(private PDO $pdo) { $this->ensureCoachSportsTable(); }
+
+    private function ensureCoachSportsTable(): void
+    {
+        $this->pdo->exec("CREATE TABLE IF NOT EXISTS coach_sports (
+            coach_id INT NOT NULL,
+            sport_id INT NOT NULL,
+            assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (coach_id, sport_id),
+            INDEX idx_coach_sports_sport (sport_id)
+        )");
+    }
+    public function all(array $filter = []): array
+    {
+        if (!empty($filter['coach_id'])) {
+            $stmt = $this->pdo->prepare('SELECT s.* FROM sports s JOIN coach_sports cs ON cs.sport_id=s.id WHERE cs.coach_id=? ORDER BY s.name');
+            $stmt->execute([(int)$filter['coach_id']]);
+            return $stmt->fetchAll();
+        }
+        return $this->pdo->query('SELECT * FROM sports ORDER BY name')->fetchAll();
+    }
     public function save(array $d): array
     {
         $id = (int)($d['id'] ?? 0);

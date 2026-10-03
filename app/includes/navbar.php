@@ -8,7 +8,7 @@ try {
     $annStmt = $pdo->query("SELECT title, body FROM announcements ORDER BY id DESC LIMIT 5");
     $annList = $annStmt->fetchAll();
     foreach ($annList as $ann) {
-        $rollBarItems[] = '📢 ' . e($ann['title']) . ': ' . e(mb_strimwidth($ann['body'], 0, 75, '...'));
+        $rollBarItems[] = '📢 ' . e($ann['title']) . ': ' . e($ann['body']);
     }
 } catch (Exception $e) {}
 

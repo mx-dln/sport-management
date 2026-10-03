@@ -7,6 +7,7 @@ $result = match ($action) {
     'status' => $controller->status((int)$_POST['id'], $_POST['status']),
     'delete' => $controller->delete((int)$_POST['id']),
     'reset_password' => $controller->resetPassword((int)$_POST['id']),
+    'coach_sports' => $controller->saveCoachSports((int)$_POST['id'], $_POST['sport_ids'] ?? []),
     default => $controller->save($_POST),
 };
 json_response($result);

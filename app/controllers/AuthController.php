@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../helpers/auth.php';
 require_once __DIR__ . '/../helpers/upload.php';
+require_once __DIR__ . '/DocumentController.php';
 
 class AuthController
 {
@@ -21,7 +22,7 @@ class AuthController
 
     public function requirements(): array
     {
-        return $this->pdo->query('SELECT id, title, description, is_required FROM requirement_types ORDER BY is_required DESC, title')->fetchAll();
+        return (new DocumentController($this->pdo))->requirements(null, true);
     }
 
     public function login(array $data): void
@@ -80,9 +81,9 @@ class AuthController
             redirect(app_url('register.php'));
         }
 
-        $namePattern = "/^[A-Za-z .'-]+$/";
+        $namePattern = "/^[A-Za-z ]+$/";
         if (!preg_match($namePattern, $firstName) || !preg_match($namePattern, $lastName) || ($middleName !== '' && !preg_match($namePattern, $middleName))) {
-            flash('error', 'Names must contain letters only. Spaces, hyphens, apostrophes, and periods are allowed.');
+            flash('error', 'Names must contain letters and spaces only. Numbers and symbols are not allowed.');
             redirect(app_url('register.php'));
         }
 
@@ -91,17 +92,17 @@ class AuthController
             redirect(app_url('register.php'));
         }
 
-        $phonePattern = '/^09\d{9}$/';
+        $phonePattern = '/^\d{11}$/';
         if (!preg_match($phonePattern, $contactNumber)) {
-            flash('error', 'Contact number must be exactly 11 digits starting with 09 (e.g. 09171234567).');
+            flash('error', 'Contact number must be exactly 11 digits (e.g. 0912 3456 789).');
             redirect(app_url('register.php'));
         }
         if ($guardianContact !== '' && !preg_match($phonePattern, $guardianContact)) {
-            flash('error', 'Guardian contact number must be exactly 11 digits starting with 09 (e.g. 09171234567).');
+            flash('error', 'Guardian contact number must be exactly 11 digits (e.g. 0912 3456 789).');
             redirect(app_url('register.php'));
         }
         if ($emergencyContact !== '' && !preg_match($phonePattern, $emergencyContact)) {
-            flash('error', 'Emergency contact number must be exactly 11 digits starting with 09 (e.g. 09171234567).');
+            flash('error', 'Emergency contact number must be exactly 11 digits (e.g. 0912 3456 789).');
             redirect(app_url('register.php'));
         }
 

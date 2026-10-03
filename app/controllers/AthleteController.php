@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../helpers/auth.php';
 require_once __DIR__ . '/../helpers/upload.php';
+require_once __DIR__ . '/DocumentController.php';
 
 class AthleteController
 {
@@ -75,15 +76,15 @@ class AthleteController
         foreach ($fields as $field) {
             $values[$field] = trim((string)($data[$field] ?? ''));
         }
-        $namePattern = "/^[A-Za-z .'-]+$/";
+        $namePattern = "/^[A-Za-z ]+$/";
         if ($values['first_name'] === '' || $values['last_name'] === '' || !preg_match($namePattern, $values['first_name']) || !preg_match($namePattern, $values['last_name']) || ($values['middle_name'] !== '' && !preg_match($namePattern, $values['middle_name']))) {
-            return ['ok' => false, 'message' => 'Names must contain letters only. Spaces, hyphens, apostrophes, and periods are allowed.'];
+            return ['ok' => false, 'message' => 'Names must contain letters and spaces only. Numbers and symbols are not allowed.'];
         }
 
-        $phonePattern = '/^09\d{9}$/';
+        $phonePattern = '/^\d{11}$/';
         foreach (['contact_number' => 'Contact number', 'guardian_contact' => 'Guardian contact', 'emergency_contact' => 'Emergency contact'] as $phoneKey => $phoneLabel) {
             if (!empty($values[$phoneKey]) && !preg_match($phonePattern, $values[$phoneKey])) {
-                return ['ok' => false, 'message' => "{$phoneLabel} must be exactly 11 digits starting with 09 (e.g. 09171234567)."];
+                return ['ok' => false, 'message' => "{$phoneLabel} must be exactly 11 digits (e.g. 0912 3456 789)."];
             }
         }
 
@@ -200,8 +201,21 @@ class AthleteController
 
     public function documents(int $athleteId): array
     {
-        $stmt = $this->pdo->prepare('SELECT rt.title, ad.* FROM requirement_types rt LEFT JOIN athlete_documents ad ON ad.requirement_type_id=rt.id AND ad.athlete_id=? ORDER BY rt.title');
+        $athlete = $this->find($athleteId);
+        $sportId = !empty($athlete['sport_id']) ? (int)$athlete['sport_id'] : null;
+        $requirements = (new DocumentController($this->pdo))->requirements($sportId);
+        $stmt = $this->pdo->prepare('SELECT * FROM athlete_documents WHERE athlete_id=?');
         $stmt->execute([$athleteId]);
-        return $stmt->fetchAll();
+        $docsByRequirement = [];
+        foreach ($stmt->fetchAll() as $doc) {
+            $docsByRequirement[(int)$doc['requirement_type_id']] = $doc;
+        }
+        return array_map(static function (array $requirement) use ($docsByRequirement): array {
+            $doc = $docsByRequirement[(int)$requirement['id']] ?? [];
+            return array_merge($requirement, $doc, [
+                'title' => $requirement['title'],
+                'requirement_type_id' => $requirement['id'],
+            ]);
+        }, $requirements);
     }
 }

@@ -6,6 +6,7 @@ $pageTitle = 'Team Management';
 $sports = (new SportController($pdo))->all();
 $coaches = $pdo->query("SELECT id, name, phone_number FROM users WHERE role='coach' AND status='active' ORDER BY name")->fetchAll();
 $teamController = new TeamController($pdo);
+$coachSportsMap = $teamController->coachesBySportMap();
 $teams = $teamController->all($_GET);
 $athletes = $pdo->query('SELECT id, student_id, first_name, last_name, position, profile_photo FROM athletes ORDER BY last_name, first_name')->fetchAll();
 
@@ -72,10 +73,10 @@ require __DIR__ . '/../../includes/header.php';
                 </option>
             <?php endforeach; ?>
         </select>
-        <select class="form-input" name="coach_id">
+        <select class="form-input" name="coach_id" data-coach-select>
             <option value="">Assign Coach (Optional)</option>
             <?php foreach ($coaches as $c): ?>
-                <option value="<?= e($c['id']) ?>"><?= e($c['name']) ?></option>
+                <option value="<?= e($c['id']) ?>" data-sports="<?= e(implode(',', $coachSportsMap[(int)$c['id']] ?? [])) ?>"><?= e($c['name']) ?></option>
             <?php endforeach; ?>
         </select>
         <input id="team-name-input" class="form-input" name="name" placeholder="Team Name (e.g. Blue Falcons Basketball)" value="<?= $isBasketballQuick ? 'Blue Falcons Basketball' : '' ?>" required>
@@ -306,10 +307,10 @@ require __DIR__ . '/../../includes/header.php';
                     </label>
                     <label class="block">
                         <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Coach</span>
-                        <select class="form-input mt-1 w-full" name="coach_id">
+                        <select class="form-input mt-1 w-full" name="coach_id" data-coach-select>
                             <option value="">Unassigned</option>
                             <?php foreach ($coaches as $coach): ?>
-                                <option value="<?= e($coach['id']) ?>" <?= (int)($t['coach_id'] ?? 0) === (int)$coach['id'] ? 'selected' : '' ?>><?= e($coach['name']) ?></option>
+                                <option value="<?= e($coach['id']) ?>" data-sports="<?= e(implode(',', $coachSportsMap[(int)$coach['id']] ?? [])) ?>" <?= (int)($t['coach_id'] ?? 0) === (int)$coach['id'] ? 'selected' : '' ?>><?= e($coach['name']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </label>
@@ -345,12 +346,13 @@ require __DIR__ . '/../../includes/header.php';
                 <form class="grid gap-3 p-5" method="post" action="<?= project_url('app/ajax/team_ajax.php') ?>" data-ajax-form>
                     <input type="hidden" name="action" value="assign_coach">
                     <input type="hidden" name="team_id" value="<?= e($t['id']) ?>">
+                    <input type="hidden" name="sport_id" value="<?= e((string)$t['sport_id']) ?>">
                     <label class="block">
                         <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Select Coach</span>
-                        <select class="form-input mt-1 w-full" name="coach_id">
+                        <select class="form-input mt-1 w-full" name="coach_id" data-coach-select>
                             <option value="">Unassigned</option>
                             <?php foreach ($coaches as $coach): ?>
-                                <option value="<?= e($coach['id']) ?>" <?= (int)($t['coach_id'] ?? 0) === (int)$coach['id'] ? 'selected' : '' ?>><?= e($coach['name']) ?></option>
+                                <option value="<?= e($coach['id']) ?>" data-sports="<?= e(implode(',', $coachSportsMap[(int)$coach['id']] ?? [])) ?>" <?= (int)($t['coach_id'] ?? 0) === (int)$coach['id'] ? 'selected' : '' ?>><?= e($coach['name']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </label>
@@ -375,6 +377,7 @@ require __DIR__ . '/../../includes/header.php';
                 <form class="grid gap-3 p-5" method="post" action="<?= project_url('app/ajax/team_ajax.php') ?>" data-ajax-form>
                     <input type="hidden" name="action" value="assign_member">
                     <input type="hidden" name="team_id" value="<?= e($t['id']) ?>">
+                    <input type="hidden" name="sport_id" value="<?= e((string)$t['sport_id']) ?>">
                     <label class="block">
                         <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Choose Athlete</span>
                         <select class="form-input mt-1 w-full" name="athlete_id" required>
@@ -410,6 +413,7 @@ require __DIR__ . '/../../includes/header.php';
                         <form class="mb-2 flex items-center justify-between rounded-xl bg-slate-50 p-3 text-sm dark:bg-slate-800" method="post" action="<?= project_url('app/ajax/team_ajax.php') ?>" data-ajax-form>
                             <input type="hidden" name="action" value="remove_member">
                             <input type="hidden" name="team_id" value="<?= e($t['id']) ?>">
+                    <input type="hidden" name="sport_id" value="<?= e((string)$t['sport_id']) ?>">
                             <input type="hidden" name="athlete_id" value="<?= e($member['id']) ?>">
                             <div class="flex items-center gap-3">
                                 <?php if (!empty($member['profile_photo'])): ?>
@@ -437,6 +441,31 @@ require __DIR__ . '/../../includes/header.php';
 <?php endforeach; ?>
 
 <script>
+
+function filterCoachOptions(scope = document) {
+    const forms = scope.querySelectorAll ? scope.querySelectorAll('form') : [];
+    forms.forEach((form) => {
+        const sportField = form.querySelector('[name="sport_id"]');
+        const coachField = form.querySelector('[data-coach-select]');
+        if (!sportField || !coachField) return;
+        const sportId = String(sportField.value || '');
+        coachField.querySelectorAll('option[data-sports]').forEach((option) => {
+            const allowed = !option.value || !sportId || (option.dataset.sports || '').split(',').includes(sportId);
+            option.hidden = !allowed;
+            option.disabled = !allowed;
+        });
+        if (coachField.selectedOptions[0]?.disabled) {
+            coachField.value = '';
+        }
+    });
+}
+
+document.addEventListener('change', (event) => {
+    if (event.target.matches('[name="sport_id"]')) {
+        filterCoachOptions(event.target.closest('form') || document);
+    }
+});
+
 function switchTeamView(mode) {
     const galleryView = document.getElementById('teams-gallery-view');
     const tableView = document.getElementById('teams-table-view');
@@ -485,6 +514,7 @@ function presetBasketballTeam() {
 
 // Restore user view preference
 document.addEventListener('DOMContentLoaded', () => {
+    filterCoachOptions(document);
     const savedMode = localStorage.getItem('teams_view_mode');
     if (savedMode === 'table') {
         switchTeamView('table');

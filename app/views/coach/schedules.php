@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../controllers/TeamController.php';
 require_role(['coach']);
 $pageTitle = 'Coach Schedules';
 $uid = current_user()['id'];
-$sports = (new SportController($pdo))->all();
+$sports = (new SportController($pdo))->all(['coach_id' => $uid]);
 $teams = (new TeamController($pdo))->all(['coach_id' => $uid]);
 $schedules = (new ScheduleController($pdo))->all(['coach_id' => $uid]);
 require __DIR__ . '/../../includes/header.php';

@@ -6,7 +6,30 @@ require_once __DIR__ . '/../helpers/auth.php';
 
 class TeamController
 {
-    public function __construct(private PDO $pdo) {}
+    public function __construct(private PDO $pdo) { $this->ensureCoachSportsTable(); }
+
+    private function ensureCoachSportsTable(): void
+    {
+        $this->pdo->exec("CREATE TABLE IF NOT EXISTS coach_sports (
+            coach_id INT NOT NULL,
+            sport_id INT NOT NULL,
+            assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (coach_id, sport_id),
+            INDEX idx_coach_sports_sport (sport_id)
+        )");
+        $this->pdo->exec("INSERT IGNORE INTO coach_sports (coach_id, sport_id)
+            SELECT DISTINCT coach_id, sport_id FROM teams WHERE coach_id IS NOT NULL AND sport_id IS NOT NULL");
+    }
+
+    public function coachesBySportMap(): array
+    {
+        $rows = $this->pdo->query("SELECT cs.coach_id, cs.sport_id FROM coach_sports cs JOIN users u ON u.id=cs.coach_id WHERE u.role='coach' AND u.status='active'")->fetchAll();
+        $map = [];
+        foreach ($rows as $row) {
+            $map[(int)$row['coach_id']][] = (int)$row['sport_id'];
+        }
+        return $map;
+    }
     public function all(array $f = []): array
     {
         if ((current_user()['role'] ?? '') === 'coach') {
@@ -23,6 +46,14 @@ class TeamController
     public function save(array $d): array
     {
         $id = (int)($d['id'] ?? 0);
+        if (!empty($d['coach_id'])) {
+            $coachCheck = $this->pdo->prepare('SELECT COUNT(*) FROM coach_sports WHERE coach_id=? AND sport_id=?');
+            $coachCheck->execute([(int)$d['coach_id'], (int)$d['sport_id']]);
+            if ((int)$coachCheck->fetchColumn() === 0) {
+                return ['ok' => false, 'message' => 'This coach is not delegated to the selected sport.'];
+            }
+        }
+
         if ($id) {
             $stmt = $this->pdo->prepare('UPDATE teams SET sport_id=?, coach_id=?, name=?, description=?, status=? WHERE id=?');
             $stmt->execute([$d['sport_id'], $d['coach_id'] ?: null, $d['name'], $d['description'] ?? '', $d['status'] ?? 'active', $id]);
@@ -63,6 +94,15 @@ class TeamController
             $stmt->execute([$coachId]);
             if ((int)$stmt->fetchColumn() === 0) {
                 return ['ok' => false, 'message' => 'Please select an active coach.'];
+            }
+
+            $stmt = $this->pdo->prepare('SELECT sport_id FROM teams WHERE id=?');
+            $stmt->execute([$teamId]);
+            $sportId = (int)$stmt->fetchColumn();
+            $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM coach_sports WHERE coach_id=? AND sport_id=?');
+            $stmt->execute([$coachId, $sportId]);
+            if ((int)$stmt->fetchColumn() === 0) {
+                return ['ok' => false, 'message' => 'This coach is not delegated to this team sport. Assign the sport to the coach first.'];
             }
         }
 

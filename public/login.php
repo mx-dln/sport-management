@@ -23,7 +23,7 @@ $loginBulletinItems = [];
 try {
     $annStmt = $pdo->query("SELECT title, body FROM announcements ORDER BY id DESC LIMIT 5");
     foreach ($annStmt->fetchAll() as $ann) {
-        $loginBulletinItems[] = '📢 ' . e($ann['title']) . ': ' . e(mb_strimwidth($ann['body'], 0, 75, '...'));
+        $loginBulletinItems[] = '📢 ' . e($ann['title']) . ': ' . e($ann['body']);
     }
 } catch (Exception $e) {}
 
@@ -201,6 +201,9 @@ body > footer.no-print {
                 <button type="button" class="portal-pill-btn" onclick="openPortalLogin('Athlete')">
                     Athlete
                 </button>
+                <a class="flex w-full items-center justify-center rounded-full border border-emerald-700 bg-white/90 px-5 py-2.5 text-sm font-black text-emerald-800 shadow-sm transition hover:-translate-y-0.5 hover:bg-emerald-50 hover:text-emerald-900 dark:border-emerald-500/60 dark:bg-slate-950/70 dark:text-emerald-300 dark:hover:bg-emerald-950" href="<?= e(app_url('register.php')) ?>">
+                    Athlete Sign Up
+                </a>
             </div>
 
             <!-- View 2: Centralized Login Form (Revealed upon selecting role) -->
