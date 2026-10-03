@@ -1,9 +1,13 @@
 document.addEventListener('click', (event) => {
     const themeToggle = event.target.closest('[data-theme-toggle]');
-    if (themeToggle) {
-        const isDark = document.documentElement.classList.toggle('dark');
-        localStorage.setItem('smis-theme', isDark ? 'dark' : 'light');
-        updateThemeToggle();
+    if (themeToggle && !themeToggle.hasAttribute('onclick')) {
+        if (typeof window.toggleTheme === 'function') {
+            window.toggleTheme(event);
+        } else {
+            const isDark = document.documentElement.classList.toggle('dark');
+            try { localStorage.setItem('smis-theme', isDark ? 'dark' : 'light'); } catch (e) {}
+            updateThemeToggle();
+        }
     }
 
     const toggle = event.target.closest('[data-sidebar-toggle]');
@@ -11,8 +15,27 @@ document.addEventListener('click', (event) => {
         document.querySelector('[data-sidebar]')?.classList.toggle('-translate-x-full');
     }
 
-    const printBtn = event.target.closest('[data-print]');
+    const printBtn = event.target.closest('[data-print], [data-print-report]');
     if (printBtn) {
+        const printCard = document.querySelector('.print-card');
+        const reportSelector = printBtn.dataset.printReport;
+        const targets = reportSelector
+            ? [document.querySelector(reportSelector)]
+            : Array.from(printCard?.querySelectorAll(':scope > article') || []);
+        const validTargets = targets.filter((target) => target && target.closest('.print-card') === printCard && target.matches('article'));
+
+        if (validTargets.length) {
+            printCard.classList.add('is-printing');
+            printCard.querySelectorAll('.is-print-target').forEach((report) => report.classList.remove('is-print-target'));
+            validTargets.forEach((target) => target.classList.add('is-print-target'));
+        }
+
+        window.addEventListener('afterprint', () => {
+            if (validTargets.length) {
+                printCard.classList.remove('is-printing');
+                validTargets.forEach((target) => target.classList.remove('is-print-target'));
+            }
+        }, { once: true });
         window.print();
     }
 
@@ -90,6 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function updateThemeToggle() {
+    if (typeof window.updateThemeToggleUI === 'function') {
+        window.updateThemeToggleUI();
+        return;
+    }
     const isDark = document.documentElement.classList.contains('dark');
     document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
         button.setAttribute('aria-pressed', isDark ? 'true' : 'false');
@@ -220,7 +247,7 @@ function openRequestedDocumentModal() {
 
 function initEnhancedTables() {
     document.querySelectorAll('table').forEach((table, index) => {
-        if (table.dataset.enhanceTable === 'false' || (table.closest('.print-card') && table.dataset.enhanceTable !== 'true') || table.closest('.biodata-sheet')) {
+        if (table.dataset.enhanceTable === 'false' || table.classList.contains('scuaa-table') || table.closest('.scuaa-sheet') || (table.closest('.print-card') && table.dataset.enhanceTable !== 'true') || table.closest('.biodata-sheet')) {
             return;
         }
 
@@ -238,11 +265,11 @@ function initEnhancedTables() {
         const title = card?.querySelector('h2, .font-bold')?.textContent?.trim() || 'Table';
 
         const toolbar = document.createElement('div');
-        toolbar.className = 'data-table-toolbar no-print flex flex-col gap-3 border-b border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between';
+        toolbar.className = 'data-table-toolbar no-print flex flex-col gap-3 border-b border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800 dark:bg-slate-900';
         toolbar.innerHTML = `
             <div>
-                <p class="text-sm font-bold text-slate-900">${escapeHtml(title)}</p>
-                <p class="text-xs text-slate-500"><span data-table-count>${rows.length}</span> records shown</p>
+                <p class="text-sm font-bold text-slate-900 dark:text-white">${escapeHtml(title)}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400"><span data-table-count>${rows.length}</span> records shown</p>
             </div>
             <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
                 <input class="form-input min-w-[220px]" type="search" placeholder="Search table..." data-table-search>
@@ -256,7 +283,7 @@ function initEnhancedTables() {
         `;
 
         const pager = document.createElement('div');
-        pager.className = 'data-table-pager no-print flex flex-col gap-3 border-t border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between';
+        pager.className = 'data-table-pager no-print flex flex-col gap-3 border-t border-slate-200 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800 dark:bg-slate-900';
 
         if (card && !card.querySelector(':scope > .data-table-toolbar')) {
             card.insertBefore(toolbar, card.firstChild);
@@ -286,11 +313,11 @@ function initEnhancedTables() {
             rows.forEach((row) => row.classList.toggle('hidden', !visible.has(row)));
             state.count.textContent = String(filtered.length);
             pager.innerHTML = `
-                <p class="text-sm text-slate-500">${filtered.length ? `Showing ${start + 1} to ${Math.min(start + pageSize, filtered.length)} of ${filtered.length}` : 'No matching records'}</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">${filtered.length ? `Showing ${start + 1} to ${Math.min(start + pageSize, filtered.length)} of ${filtered.length}` : 'No matching records'}</p>
                 <div class="flex flex-wrap gap-2">
-                    <button class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold ${page <= 1 ? 'opacity-40' : 'hover:bg-slate-50'}" type="button" data-table-prev ${page <= 1 ? 'disabled' : ''}>Previous</button>
-                    <span class="rounded-lg bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600">Page ${page} of ${totalPages}</span>
-                    <button class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold ${page >= totalPages ? 'opacity-40' : 'hover:bg-slate-50'}" type="button" data-table-next ${page >= totalPages ? 'disabled' : ''}>Next</button>
+                    <button class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-3 py-2 text-sm font-semibold ${page <= 1 ? 'opacity-40' : 'hover:bg-slate-50 dark:hover:bg-slate-700'}" type="button" data-table-prev ${page <= 1 ? 'disabled' : ''}>Previous</button>
+                    <span class="rounded-lg bg-slate-100 dark:bg-slate-800 px-3 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300">Page ${page} of ${totalPages}</span>
+                    <button class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-3 py-2 text-sm font-semibold ${page >= totalPages ? 'opacity-40' : 'hover:bg-slate-50 dark:hover:bg-slate-700'}" type="button" data-table-next ${page >= totalPages ? 'disabled' : ''}>Next</button>
                 </div>
             `;
         };

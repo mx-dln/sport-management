@@ -14,7 +14,12 @@ require __DIR__ . '/../../includes/header.php';
             <h2 class="text-lg font-black text-slate-950">Users</h2>
             <p class="mt-1 text-sm text-slate-500">Manage non-admin user accounts and access status.</p>
         </div>
-        <button class="btn-primary" type="button" data-modal-open="#add-user-modal">Add User</button>
+        <div class="flex items-center gap-2">
+            <a href="<?= e(app_url('index.php?page=reports#coach-report')) ?>" class="smis-cmd-btn" title="View & Print Master List of Coaches">
+                🖨️ Master List of Coaches
+            </a>
+            <button class="btn-primary" type="button" data-modal-open="#add-user-modal">+ Add User</button>
+        </div>
     </div>
     <div class="overflow-x-auto">
         <table class="w-full text-sm">
@@ -77,16 +82,16 @@ require __DIR__ . '/../../includes/header.php';
             </header>
             <form class="p-5" method="post" action="<?= project_url('app/ajax/user_ajax.php') ?>" data-ajax-form data-validate>
                 <label class="mb-3 block">
-                    <span class="text-sm font-medium">Full Name</span>
+                    <span class="text-sm font-semibold text-slate-700">Full Name <span class="text-rose-600 font-bold">*</span></span>
                     <input class="form-input mt-1" name="name" required>
                 </label>
                 <label class="mb-3 block">
-                    <span class="text-sm font-medium">Email</span>
+                    <span class="text-sm font-semibold text-slate-700">Email Address <span class="text-rose-600 font-bold">*</span></span>
                     <input class="form-input mt-1" name="email" type="email" required>
                 </label>
                 <label class="mb-3 block">
-                    <span class="text-sm font-medium">Contact Number</span>
-                    <input class="form-input mt-1" name="phone_number" placeholder="Used for SMS notifications">
+                    <span class="text-sm font-semibold text-slate-700">Contact Number (11 Digits)</span>
+                    <input class="form-input mt-1" type="tel" name="phone_number" placeholder="09XXXXXXXXX (11 digits)" pattern="09[0-9]{9}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" data-phone-11>
                 </label>
                 <label class="mb-3 block">
                     <span class="text-sm font-medium">Password</span>

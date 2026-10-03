@@ -21,9 +21,22 @@ foreach ($uploads as $upload) {
 require __DIR__ . '/../../includes/header.php';
 ?>
 <div class="min-h-screen lg:pl-72"><?php require __DIR__ . '/../../includes/sidebar.php'; require __DIR__ . '/../../includes/navbar.php'; ?><main class="p-4 lg:p-6">
+<div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+        <h2 class="text-2xl font-black text-slate-950 dark:text-white">Athlete Requirement Documents</h2>
+        <p class="text-sm text-slate-500">Review, approve/reject, and scan & upload PSA Birth Certificates, COG, and medical clearances.</p>
+    </div>
+    <div class="flex items-center gap-2">
+        <button type="button" class="smis-cmd-btn primary" data-modal-open="#scan-upload-modal">
+            <span>📷</span>
+            <span>Scan &amp; Upload Document</span>
+        </button>
+    </div>
+</div>
+
 <div class="grid gap-6 xl:grid-cols-2">
 <form class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm" method="post" action="<?= project_url('app/ajax/document_ajax.php') ?>" data-ajax-form>
-<input type="hidden" name="action" value="requirement"><h2 class="mb-4 font-bold">Define Requirement</h2><input class="form-input mb-3" name="title" placeholder="Document title" required><textarea class="form-input mb-3" name="description" placeholder="Description"></textarea><label class="mb-4 flex gap-2 text-sm"><input type="checkbox" name="is_required" checked> Required</label><button class="btn-primary">Save Requirement</button></form>
+<input type="hidden" name="action" value="requirement"><h2 class="mb-4 font-bold">Define Requirement</h2><input class="form-input mb-3" name="title" placeholder="Document title *" required><textarea class="form-input mb-3" name="description" placeholder="Description"></textarea><label class="mb-4 flex gap-2 text-sm"><input type="checkbox" name="is_required" checked> Required</label><button class="btn-primary">Save Requirement</button></form>
 <form class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm" method="post" enctype="multipart/form-data" action="<?= project_url('app/ajax/document_ajax.php') ?>" data-ajax-form>
 <input type="hidden" name="action" value="upload_document"><h2 class="mb-4 font-bold">Upload Athlete Document</h2>
 <select class="form-input mb-3" name="athlete_id" required><option value="">Athlete</option><?php foreach ($athletes as $a): ?><option value="<?= e($a['id']) ?>"><?= e($a['last_name'] . ', ' . $a['first_name']) ?></option><?php endforeach; ?></select>

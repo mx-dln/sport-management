@@ -101,10 +101,15 @@ require __DIR__ . '/../../includes/header.php';
                     <?php endforeach; ?>
                 </select>
             </label>
-            <?php foreach (['section'=>'Section','contact_number'=>'Contact Number','guardian_name'=>'Guardian Name','guardian_contact'=>'Guardian Contact','emergency_contact'=>'Emergency Contact','height'=>'Height','weight'=>'Weight','blood_type'=>'Blood Type','medical_condition'=>'Medical Condition'] as $name=>$label): ?>
+            <?php foreach (['section'=>'Section','contact_number'=>'Contact Number (11 Digits)','guardian_name'=>'Guardian Name','guardian_contact'=>'Guardian Contact (11 Digits)','emergency_contact'=>'Emergency Contact (11 Digits)','height'=>'Height','weight'=>'Weight','blood_type'=>'Blood Type','medical_condition'=>'Medical Condition'] as $name=>$label): ?>
+                <?php $isPhone = in_array($name, ['contact_number', 'guardian_contact', 'emergency_contact'], true); ?>
                 <label class="block">
-                    <span class="text-sm font-medium"><?= e($label) ?></span>
-                    <input class="form-input mt-1" name="<?= e($name) ?>" required value="<?= e($athlete[$name]) ?>">
+                    <span class="text-sm font-semibold text-slate-700 dark:text-slate-300"><?= e($label) ?> <span class="text-rose-600 font-bold">*</span></span>
+                    <?php if ($isPhone): ?>
+                        <input class="form-input mt-1" type="tel" name="<?= e($name) ?>" required value="<?= e($athlete[$name]) ?>" placeholder="09XXXXXXXXX (11 digits)" pattern="09[0-9]{9}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" data-phone-11>
+                    <?php else: ?>
+                        <input class="form-input mt-1" name="<?= e($name) ?>" required value="<?= e($athlete[$name]) ?>">
+                    <?php endif; ?>
                 </label>
             <?php endforeach; ?>
             <label class="block">

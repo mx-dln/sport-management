@@ -40,8 +40,9 @@ require __DIR__ . '/../../includes/header.php';
             <form id="athlete-biodata-form" class="grid gap-3 md:grid-cols-3" method="post"
                 enctype="multipart/form-data" action="<?= project_url('app/ajax/athlete_ajax.php') ?>" data-ajax-form
                 data-validate>
-                <?php foreach (['student_id' => 'Student ID', 'first_name' => 'First Name', 'middle_name' => 'Middle Name', 'last_name' => 'Last Name', 'birthdate' => 'Birthdate', 'address' => 'Address', 'course' => 'Course', 'year_level' => 'Year Level', 'section' => 'Section', 'contact_number' => 'Contact No.', 'guardian_name' => 'Guardian', 'guardian_contact' => 'Guardian Contact', 'emergency_contact' => 'Emergency Contact', 'height' => 'Height', 'weight' => 'Weight', 'blood_type' => 'Blood Type', 'medical_condition' => 'Medical Condition'] as $name => $label): ?>
-                    <input class="form-input" name="<?= e($name) ?>" placeholder="<?= e($label) ?>" <?= in_array($name, ['student_id', 'first_name', 'last_name'], true) ? 'required' : '' ?>     <?= $name === 'birthdate' ? 'type="date"' : '' ?>>
+                <?php foreach (['student_id' => 'Student ID *', 'first_name' => 'First Name *', 'middle_name' => 'Middle Name', 'last_name' => 'Last Name *', 'birthdate' => 'Birthdate', 'address' => 'Address', 'course' => 'Course', 'year_level' => 'Year Level', 'section' => 'Section', 'contact_number' => 'Contact No. (11 Digits)', 'guardian_name' => 'Guardian', 'guardian_contact' => 'Guardian Contact (11 Digits)', 'emergency_contact' => 'Emergency Contact (11 Digits)', 'height' => 'Height', 'weight' => 'Weight', 'blood_type' => 'Blood Type', 'medical_condition' => 'Medical Condition'] as $name => $label): ?>
+                    <?php $isP = in_array($name, ['contact_number', 'guardian_contact', 'emergency_contact'], true); ?>
+                    <input class="form-input" name="<?= e($name) ?>" placeholder="<?= e($label) ?>" <?= in_array($name, ['student_id', 'first_name', 'last_name'], true) ? 'required' : '' ?> <?= $name === 'birthdate' ? 'type="date"' : '' ?> <?= $isP ? 'type="tel" maxlength="11" minlength="11" pattern="09[0-9]{9}" inputmode="numeric" data-phone-11' : '' ?>>
                 <?php endforeach; ?>
                 <select class="form-input" name="gender">
                     <option>Male</option>
@@ -264,20 +265,20 @@ require __DIR__ . '/../../includes/header.php';
                                 <input class="form-input mt-1" name="section" value="<?= e($a['section'] ?? '') ?>">
                             </label>
                             <label class="block">
-                                <span class="text-sm font-semibold text-slate-700">Contact No.</span>
-                                <input class="form-input mt-1" name="contact_number" value="<?= e($a['contact_number'] ?? '') ?>">
+                                <span class="text-sm font-semibold text-slate-700">Contact No. (11 Digits)</span>
+                                <input class="form-input mt-1" type="tel" name="contact_number" value="<?= e($a['contact_number'] ?? '') ?>" placeholder="09XXXXXXXXX (11 digits)" pattern="09[0-9]{9}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" data-phone-11>
                             </label>
                             <label class="block">
-                                <span class="text-sm font-semibold text-slate-700">Guardian</span>
+                                <span class="text-sm font-semibold text-slate-700">Guardian Name</span>
                                 <input class="form-input mt-1" name="guardian_name" value="<?= e($a['guardian_name'] ?? '') ?>">
                             </label>
                             <label class="block">
-                                <span class="text-sm font-semibold text-slate-700">Guardian Contact</span>
-                                <input class="form-input mt-1" name="guardian_contact" value="<?= e($a['guardian_contact'] ?? '') ?>">
+                                <span class="text-sm font-semibold text-slate-700">Guardian Contact (11 Digits)</span>
+                                <input class="form-input mt-1" type="tel" name="guardian_contact" value="<?= e($a['guardian_contact'] ?? '') ?>" placeholder="09XXXXXXXXX (11 digits)" pattern="09[0-9]{9}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" data-phone-11>
                             </label>
                             <label class="block">
-                                <span class="text-sm font-semibold text-slate-700">Emergency Contact</span>
-                                <input class="form-input mt-1" name="emergency_contact" value="<?= e($a['emergency_contact'] ?? '') ?>">
+                                <span class="text-sm font-semibold text-slate-700">Emergency Contact (11 Digits)</span>
+                                <input class="form-input mt-1" type="tel" name="emergency_contact" value="<?= e($a['emergency_contact'] ?? '') ?>" placeholder="09XXXXXXXXX (11 digits)" pattern="09[0-9]{9}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" data-phone-11>
                             </label>
                             <label class="block">
                                 <span class="text-sm font-semibold text-slate-700">Height</span>

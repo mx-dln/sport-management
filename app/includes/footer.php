@@ -1,4 +1,4 @@
-<footer class="mt-8 border-t border-slate-200 py-4 text-center text-xs text-slate-500">
+<footer class="no-print mt-8 border-t border-slate-200 py-4 text-center text-xs text-slate-500">
     &copy; <?= date('Y') ?> <?= e(app_setting('app_name')) ?>
 </footer>
 <script src="<?= app_url('assets/js/app.js?v=' . filemtime(__DIR__ . '/../../public/assets/js/app.js')) ?>"></script>

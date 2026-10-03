@@ -302,11 +302,11 @@ INSERT INTO team_members (team_id, athlete_id) VALUES (1,1);
 
 INSERT INTO requirement_types (title,description,is_required) VALUES
 ('School ID','Valid school identification card',1),
-('Birth Certificate','PSA or local civil registry copy',1),
+('PSA Birth Certificate','Official PSA or local civil registry copy',1),
 ('Medical Certificate','Medical clearance for sports participation',1),
 ('Parent Consent','Signed parent or guardian consent',1),
 ('Waiver Form','Signed sports participation waiver',1),
-('Grade Slip / COR','Current grade slip or certificate of registration',1),
+('Certificate of Grades (COG) / Grade Slip','Current Certificate of Grades (COG) or certificate of registration',1),
 ('Good Moral Certificate','Certificate of good moral character',1),
 ('2x2 Picture','Recent 2x2 ID picture',1);
 

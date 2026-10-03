@@ -80,6 +80,13 @@ class AthleteController
             return ['ok' => false, 'message' => 'Names must contain letters only. Spaces, hyphens, apostrophes, and periods are allowed.'];
         }
 
+        $phonePattern = '/^09\d{9}$/';
+        foreach (['contact_number' => 'Contact number', 'guardian_contact' => 'Guardian contact', 'emergency_contact' => 'Emergency contact'] as $phoneKey => $phoneLabel) {
+            if (!empty($values[$phoneKey]) && !preg_match($phonePattern, $values[$phoneKey])) {
+                return ['ok' => false, 'message' => "{$phoneLabel} must be exactly 11 digits starting with 09 (e.g. 09171234567)."];
+            }
+        }
+
         foreach (['user_id', 'sport_id', 'team_id'] as $nullableId) {
             $values[$nullableId] = $values[$nullableId] === '' ? null : (int)$values[$nullableId];
         }

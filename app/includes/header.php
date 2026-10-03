@@ -14,21 +14,58 @@ if ($showLoginSplash) {
         <link rel="icon" href="<?= e(app_icon_url()) ?>">
     <?php endif; ?>
     <script>
-        (() => {
-            const storedTheme = localStorage.getItem('smis-theme');
-            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
+        (function () {
+            var storedTheme = localStorage.getItem('smis-theme');
+            if (storedTheme === 'dark') {
                 document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
             }
         })();
+
+        function updateThemeToggleUI() {
+            var isDark = document.documentElement.classList.contains('dark');
+            document.querySelectorAll('[data-theme-toggle]').forEach(function (button) {
+                button.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+                var moon = button.querySelector('[data-theme-moon]');
+                var sun = button.querySelector('[data-theme-sun]');
+                var label = button.querySelector('[data-theme-label]');
+                if (moon) moon.classList.toggle('hidden', isDark);
+                if (sun) sun.classList.toggle('hidden', !isDark);
+                if (label) label.textContent = isDark ? 'Light' : 'Dark';
+            });
+        }
+
+        function toggleTheme(event) {
+            if (event) {
+                try {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } catch (e) {}
+            }
+            var isDark = document.documentElement.classList.toggle('dark');
+            try {
+                localStorage.setItem('smis-theme', isDark ? 'dark' : 'light');
+            } catch (e) {}
+            updateThemeToggleUI();
+        }
+
+        window.toggleTheme = toggleTheme;
+        window.updateThemeToggle = updateThemeToggleUI;
+        document.addEventListener('DOMContentLoaded', updateThemeToggleUI);
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        };
+    </script>
     <link rel="stylesheet" href="<?= app_url('assets/css/tailwind.css') ?>">
     <style>
         :root { --theme-color: <?= e(app_setting('theme_color', '#2563eb')) ?>; }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900">
+<body class="bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200">
 <?php if ($showLoginSplash): ?>
 <div class="smis-splash fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-slate-100" data-splash data-splash-duration="900" role="status" aria-live="polite">
     <div class="flex flex-col items-center gap-5 px-6 text-center">

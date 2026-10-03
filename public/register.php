@@ -30,26 +30,30 @@ require __DIR__ . '/../app/includes/header.php';
             <button type="button" class="register-step-tab rounded-lg bg-slate-100 px-2 py-2 text-slate-600" data-step-target="2">2. Profile</button>
             <button type="button" class="register-step-tab rounded-lg bg-slate-100 px-2 py-2 text-slate-600" data-step-target="3">3. Documents</button>
         </div>
-        <form method="post" enctype="multipart/form-data" class="mt-6" data-validate id="athlete-register-form">
+        <div class="mb-4 mt-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold text-slate-600">
+            <span>Fields marked with <span class="font-bold text-rose-600">*</span> are mandatory</span>
+            <span class="text-blue-600 font-bold">11-digit mobile numbers only (09XXXXXXXXX)</span>
+        </div>
+        <form method="post" enctype="multipart/form-data" data-validate id="athlete-register-form">
             <input type="hidden" name="auth_action" value="register_athlete">
             <section class="register-step grid gap-3 sm:grid-cols-2" data-step="1">
                 <label class="block">
-                    <span class="text-sm font-medium">Student ID</span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="student_id" required>
+                    <span class="text-sm font-semibold text-slate-700">Student ID <span class="text-rose-600 font-bold">*</span></span>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="student_id" placeholder="e.g. 2026-0001" required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Email</span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="email" name="email" required>
+                    <span class="text-sm font-semibold text-slate-700">Email Address <span class="text-rose-600 font-bold">*</span></span>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="email" name="email" placeholder="name@domain.com" required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Password</span>
+                    <span class="text-sm font-semibold text-slate-700">Password <span class="text-rose-600 font-bold">*</span></span>
                     <div class="mt-1 flex overflow-hidden rounded-lg border border-slate-300 focus-within:border-blue-500">
                         <input class="w-full border-0 px-3 py-2 focus:outline-none" type="password" name="password" required minlength="6" data-password-field>
                         <button class="border-l border-slate-300 px-3 text-sm font-semibold text-slate-600 hover:bg-slate-50" type="button" data-password-toggle>Show</button>
                     </div>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Confirm Password</span>
+                    <span class="text-sm font-semibold text-slate-700">Confirm Password <span class="text-rose-600 font-bold">*</span></span>
                     <div class="mt-1 flex overflow-hidden rounded-lg border border-slate-300 focus-within:border-blue-500">
                         <input class="w-full border-0 px-3 py-2 focus:outline-none" type="password" name="confirm_password" required minlength="6" data-password-field>
                         <button class="border-l border-slate-300 px-3 text-sm font-semibold text-slate-600 hover:bg-slate-50" type="button" data-password-toggle>Show</button>
@@ -58,23 +62,23 @@ require __DIR__ . '/../app/includes/header.php';
             </section>
             <section class="register-step hidden grid gap-3 sm:grid-cols-2" data-step="2">
                 <label class="block">
-                    <span class="text-sm font-medium">First Name</span>
+                    <span class="text-sm font-semibold text-slate-700">First Name <span class="text-rose-600 font-bold">*</span></span>
                     <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="first_name" pattern="[A-Za-z .'-]+" title="Use letters only. Spaces, hyphens, apostrophes, and periods are allowed." required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Last Name</span>
+                    <span class="text-sm font-semibold text-slate-700">Last Name <span class="text-rose-600 font-bold">*</span></span>
                     <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="last_name" pattern="[A-Za-z .'-]+" title="Use letters only. Spaces, hyphens, apostrophes, and periods are allowed." required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Middle Name</span>
+                    <span class="text-sm font-semibold text-slate-700">Middle Name <span class="text-xs font-normal text-slate-400">(Optional)</span></span>
                     <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="middle_name" pattern="[A-Za-z .'-]+" title="Use letters only. Spaces, hyphens, apostrophes, and periods are allowed.">
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Contact Number</span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="contact_number" placeholder="09XXXXXXXXX" required>
+                    <span class="text-sm font-semibold text-slate-700">Contact Number (11 Digits) <span class="text-rose-600 font-bold">*</span></span>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="tel" name="contact_number" placeholder="09XXXXXXXXX" pattern="09[0-9]{9}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" title="Must be exactly 11 digits starting with 09 (e.g. 09171234567)" data-phone-11 required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Gender</span>
+                    <span class="text-sm font-semibold text-slate-700">Gender <span class="text-rose-600 font-bold">*</span></span>
                     <select class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="gender" required>
                         <option value="">Select gender</option>
                         <option>Male</option>
@@ -82,15 +86,15 @@ require __DIR__ . '/../app/includes/header.php';
                     </select>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Birthdate</span>
+                    <span class="text-sm font-semibold text-slate-700">Birthdate <span class="text-rose-600 font-bold">*</span></span>
                     <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="date" name="birthdate" required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Course</span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="course" required>
+                    <span class="text-sm font-semibold text-slate-700">Course <span class="text-rose-600 font-bold">*</span></span>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="course" placeholder="e.g. BS Information Technology" required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Year Level</span>
+                    <span class="text-sm font-semibold text-slate-700">Year Level <span class="text-rose-600 font-bold">*</span></span>
                     <select class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="year_level" required>
                         <option value="">Select year level</option>
                         <option>1st Year</option>
@@ -101,41 +105,41 @@ require __DIR__ . '/../app/includes/header.php';
                     </select>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Section</span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="section" required>
+                    <span class="text-sm font-semibold text-slate-700">Section <span class="text-rose-600 font-bold">*</span></span>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="section" placeholder="e.g. 3A" required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Guardian Name</span>
+                    <span class="text-sm font-semibold text-slate-700">Guardian Name <span class="text-rose-600 font-bold">*</span></span>
                     <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="guardian_name" required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Guardian Contact</span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="guardian_contact" required>
+                    <span class="text-sm font-semibold text-slate-700">Guardian Contact (11 Digits) <span class="text-rose-600 font-bold">*</span></span>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="tel" name="guardian_contact" placeholder="09XXXXXXXXX" pattern="09[0-9]{9}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" title="Must be exactly 11 digits starting with 09 (e.g. 09171234567)" data-phone-11 required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Emergency Contact</span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="emergency_contact" required>
+                    <span class="text-sm font-semibold text-slate-700">Emergency Contact (11 Digits) <span class="text-rose-600 font-bold">*</span></span>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" type="tel" name="emergency_contact" placeholder="09XXXXXXXXX" pattern="09[0-9]{9}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" title="Must be exactly 11 digits starting with 09 (e.g. 09171234567)" data-phone-11 required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Height</span>
+                    <span class="text-sm font-semibold text-slate-700">Height <span class="text-rose-600 font-bold">*</span></span>
                     <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="height" placeholder="175 cm" required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Weight</span>
+                    <span class="text-sm font-semibold text-slate-700">Weight <span class="text-rose-600 font-bold">*</span></span>
                     <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="weight" placeholder="68 kg" required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Blood Type</span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="blood_type" required>
+                    <span class="text-sm font-semibold text-slate-700">Blood Type <span class="text-rose-600 font-bold">*</span></span>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="blood_type" placeholder="e.g. O+, A+, B+" required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Medical Condition</span>
-                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="medical_condition" placeholder="None" required>
+                    <span class="text-sm font-semibold text-slate-700">Medical Condition <span class="text-rose-600 font-bold">*</span></span>
+                    <input class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="medical_condition" placeholder="None or state specific condition" required>
                 </label>
                 <label class="block">
-                    <span class="text-sm font-medium">Sport</span>
+                    <span class="text-sm font-semibold text-slate-700">Sport <span class="text-xs font-normal text-slate-400">(Optional)</span></span>
                     <select class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="sport_id">
-                        <option value="">Select later</option>
+                        <option value="">Select later / Any</option>
                         <?php foreach ($sports as $sport): ?>
                             <option value="<?= e((string)$sport['id']) ?>"><?= e($sport['name']) ?></option>
                         <?php endforeach; ?>
@@ -144,19 +148,19 @@ require __DIR__ . '/../app/includes/header.php';
                 <div class="rounded-lg bg-slate-50 p-3 text-sm text-slate-500">Team assignment is handled by the sports office or coach after registration.</div>
                 <div class="grid gap-3 sm:col-span-2 sm:grid-cols-3">
                     <label class="block">
-                        <span class="text-sm font-medium">Province</span>
+                        <span class="text-sm font-semibold text-slate-700">Province <span class="text-rose-600 font-bold">*</span></span>
                         <select class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="address_province" data-address-province required>
                             <option value="Isabela" selected>Isabela</option>
                         </select>
                     </label>
                     <label class="block">
-                        <span class="text-sm font-medium">Municipality / City</span>
+                        <span class="text-sm font-semibold text-slate-700">Municipality / City <span class="text-rose-600 font-bold">*</span></span>
                         <select class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="address_municipality" data-address-municipality required>
                             <option value="">Loading municipalities...</option>
                         </select>
                     </label>
                     <label class="block">
-                        <span class="text-sm font-medium">Barangay</span>
+                        <span class="text-sm font-semibold text-slate-700">Barangay <span class="text-rose-600 font-bold">*</span></span>
                         <select class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" name="address_barangay" data-address-barangay required disabled>
                             <option value="">Select municipality first</option>
                         </select>
@@ -164,23 +168,39 @@ require __DIR__ . '/../app/includes/header.php';
                 </div>
                 <input type="hidden" name="address" data-address-combined>
                 <label class="block sm:col-span-2">
-                    <span class="text-sm font-medium">Address</span>
+                    <span class="text-sm font-semibold text-slate-700">Full Address (Auto-Generated)</span>
                     <input class="mt-1 w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-slate-600 focus:outline-none" data-address-preview readonly placeholder="Select barangay, municipality, and province">
                 </label>
             </section>
             <section class="register-step hidden" data-step="3">
-                <div class="mb-3 rounded-lg bg-blue-50 p-3 text-sm text-blue-800">Upload available documents now, or skip and complete them later from the athlete dashboard.</div>
+                <div class="mb-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
+                    <p class="font-bold">Scan &amp; Upload Documents</p>
+                    <p class="mt-1 text-xs text-blue-700">You may upload scanned PDF or image copies (PSA Birth Certificate, COG/Grade Slip, Medical Clearance, etc.) now, or upload them later via your athlete dashboard.</p>
+                </div>
                 <div class="grid gap-3 sm:grid-cols-2">
                     <?php foreach ($requirements as $requirement): ?>
-                        <label class="block rounded-lg border border-slate-200 p-3">
+                        <?php 
+                        $isBirthCert = stripos($requirement['title'], 'Birth Certificate') !== false;
+                        $isCOG = stripos($requirement['title'], 'Grade') !== false || stripos($requirement['title'], 'COG') !== false;
+                        ?>
+                        <label class="block rounded-xl border <?= ($isBirthCert || $isCOG) ? 'border-blue-300 bg-blue-50/40 shadow-sm' : 'border-slate-200' ?> p-3.5 transition hover:border-blue-400">
                             <span class="flex items-center justify-between gap-3 text-sm font-semibold">
-                                <span><?= e($requirement['title']) ?></span>
-                                <span class="text-xs <?= $requirement['is_required'] ? 'text-red-600' : 'text-slate-400' ?>"><?= $requirement['is_required'] ? 'Required' : 'Optional' ?></span>
+                                <span class="flex items-center gap-1.5">
+                                    <?php if ($isBirthCert): ?>
+                                        <span class="rounded bg-indigo-600 px-1.5 py-0.5 text-[10px] font-black uppercase text-white">PSA Scan</span>
+                                    <?php elseif ($isCOG): ?>
+                                        <span class="rounded bg-emerald-600 px-1.5 py-0.5 text-[10px] font-black uppercase text-white">COG Scan</span>
+                                    <?php endif; ?>
+                                    <span><?= e($requirement['title']) ?></span>
+                                </span>
+                                <span class="text-xs font-bold <?= $requirement['is_required'] ? 'text-rose-600' : 'text-slate-400' ?>"><?= $requirement['is_required'] ? '* Required' : 'Optional' ?></span>
                             </span>
                             <?php if (!empty($requirement['description'])): ?>
                                 <span class="mt-1 block text-xs text-slate-500"><?= e($requirement['description']) ?></span>
                             <?php endif; ?>
-                            <input class="mt-2 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" type="file" name="documents[<?= e((string)$requirement['id']) ?>]" accept=".pdf,image/*">
+                            <div class="mt-2.5 flex items-center gap-2">
+                                <input class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs focus:border-blue-500 focus:outline-none" type="file" name="documents[<?= e((string)$requirement['id']) ?>]" accept=".pdf,image/*">
+                            </div>
                         </label>
                     <?php endforeach; ?>
                 </div>

@@ -27,6 +27,8 @@ $routes = [
         'competition_manage' => 'admin/competition_manage.php',
         'history' => 'admin/history.php',
         'reports' => 'admin/reports.php',
+        'athlete_gallery' => 'admin/athlete_gallery.php',
+        'gallery' => 'admin/athlete_gallery.php',
         'settings' => 'admin/settings.php',
     ],
     'sports_coordinator' => [
@@ -42,6 +44,8 @@ $routes = [
         'competition_manage' => 'admin/competition_manage.php',
         'history' => 'admin/history.php',
         'reports' => 'admin/reports.php',
+        'athlete_gallery' => 'admin/athlete_gallery.php',
+        'gallery' => 'admin/athlete_gallery.php',
     ],
     'coach' => [
         'dashboard' => 'coach/dashboard.php',
@@ -51,6 +55,8 @@ $routes = [
         'schedules' => 'coach/schedules.php',
         'attendance' => 'coach/attendance.php',
         'announcements' => 'coach/announcements.php',
+        'athlete_gallery' => 'admin/athlete_gallery.php',
+        'gallery' => 'admin/athlete_gallery.php',
     ],
     'athlete' => [
         'dashboard' => 'athlete/dashboard.php',

@@ -10,6 +10,19 @@ $stmt = $pdo->prepare('SELECT * FROM athletes WHERE user_id=? LIMIT 1');
 $stmt->execute([current_user()['id']]);
 $athlete = $stmt->fetch();
 $historyStats = $athlete ? (new AthleteHistoryController($pdo))->stats((int)$athlete['id']) : [];
+$historyRecords = $athlete ? (new AthleteHistoryController($pdo))->forAthlete((int)$athlete['id']) : [];
+
+// Check Birth Certificate & COG status specifically
+$birthCertDoc = null;
+$cogDoc = null;
+foreach ($docs as $d) {
+    if (stripos($d['title'], 'Birth') !== false || stripos($d['title'], 'PSA') !== false) {
+        $birthCertDoc = $d;
+    }
+    if (stripos($d['title'], 'Grade') !== false || stripos($d['title'], 'COG') !== false) {
+        $cogDoc = $d;
+    }
+}
 $docs = $athlete ? (new AthleteController($pdo))->documents((int)$athlete['id']) : [];
 $approvedDocs = count(array_filter($docs, fn($d) => ($d['status'] ?? '') === 'Approved'));
 $submittedDocs = count(array_filter($docs, fn($d) => in_array(($d['status'] ?? ''), ['Submitted', 'Approved'], true)));
@@ -135,6 +148,78 @@ require __DIR__ . '/../../includes/header.php';
                 <?php endif; ?>
             </div>
         </section>
+    </div>
+</section>
+
+<!-- ================= BOTTOM ATHLETE HISTORY SECTION ================= -->
+<section id="athlete-history-section" class="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <div class="flex flex-col gap-3 border-b border-slate-100 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
+        <div>
+            <div class="flex items-center gap-2">
+                <span class="grid h-7 w-7 place-items-center rounded-lg bg-amber-100 text-sm dark:bg-amber-950">🏆</span>
+                <h2 class="text-lg font-black text-slate-950 dark:text-white">My Athletic History &amp; Achievements</h2>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">Previous athletic competitions, personal medals, and performance portfolio.</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                🥇 <?= $historyStats['gold'] ?? 0 ?> | 🥈 <?= $historyStats['silver'] ?? 0 ?> | 🥉 <?= $historyStats['bronze'] ?? 0 ?>
+            </span>
+            <a href="<?= e(app_url('index.php?page=history')) ?>" class="smis-cmd-btn primary">
+                Manage History
+            </a>
+        </div>
+    </div>
+
+    <!-- History Records Table with custom sleek scrollbar -->
+    <div class="max-h-72 overflow-y-auto smis-scrollbar">
+        <table class="w-full text-sm" data-enhance-table="false">
+            <thead class="bg-slate-50 dark:bg-slate-800 sticky top-0">
+                <tr>
+                    <th class="table-th">Year</th>
+                    <th class="table-th">Competition Name</th>
+                    <th class="table-th">Sport &amp; Event</th>
+                    <th class="table-th">Level</th>
+                    <th class="table-th">Result &amp; Medal</th>
+                    <th class="table-th text-right">Proof File</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($historyRecords as $hr): ?>
+                    <?php
+                    $medalEmoji = match ($hr['medal'] ?? '') {
+                        'Gold' => '🥇 Gold',
+                        'Silver' => '🥈 Silver',
+                        'Bronze' => '🥉 Bronze',
+                        default => $hr['medal'] ? e($hr['medal']) : 'Participant',
+                    };
+                    ?>
+                    <tr class="border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
+                        <td class="table-td font-semibold text-slate-600 dark:text-slate-400"><?= e((string)($hr['competition_year'] ?: '—')) ?></td>
+                        <td class="table-td font-bold text-slate-900 dark:text-white"><?= e($hr['competition_name']) ?></td>
+                        <td class="table-td"><?= e($hr['sport_name'] ?: 'Sport') ?><?= $hr['event_name'] ? ' — ' . e($hr['event_name']) : '' ?></td>
+                        <td class="table-td"><span class="status-pill status-neutral"><?= e($hr['competition_level']) ?></span></td>
+                        <td class="table-td font-semibold text-slate-800 dark:text-slate-200"><?= $medalEmoji ?><?= $hr['result'] ? ' (' . e($hr['result']) . ')' : '' ?></td>
+                        <td class="table-td text-right">
+                            <?php if (!empty($hr['proof_file'])): ?>
+                                <a href="<?= e(app_url($hr['proof_file'])) ?>" data-attachment-preview data-attachment-url="<?= e(app_url($hr['proof_file'])) ?>" data-attachment-name="<?= e($hr['competition_name']) ?> Proof" class="text-xs font-bold text-blue-600 hover:underline">
+                                    View Proof
+                                </a>
+                            <?php else: ?>
+                                <span class="text-xs text-slate-400">—</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                <?php if (!$historyRecords): ?>
+                    <tr>
+                        <td class="table-td text-center text-slate-400 py-8" colspan="6">
+                            No athletic history records logged yet. <a href="<?= e(app_url('index.php?page=history')) ?>" class="text-blue-600 font-bold hover:underline">Add your previous achievements</a>.
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
 </section>
 

@@ -66,14 +66,98 @@ require __DIR__ . '/../../includes/header.php';
             <a class="btn-muted" href="<?= e(app_url('index.php?page=competition')) ?>">Reset</a>
         <?php endif; ?>
     </form>
-    <button class="btn-primary" type="button" data-modal-open="#competition-add-modal">Add Competition</button>
+    <div class="flex items-center gap-2">
+        <div class="inline-flex rounded-xl border border-slate-200 bg-white p-1 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+            <button type="button" id="btn-comp-table" class="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-bold text-white transition" onclick="switchCompView('table')">
+                ☰ Table Form
+            </button>
+            <button type="button" id="btn-comp-grid" class="rounded-lg px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition" onclick="switchCompView('grid')">
+                ⊞ Cards Grid
+            </button>
+        </div>
+        <button class="btn-primary flex items-center gap-1.5" type="button" data-modal-open="#competition-add-modal">
+            <span>+ Add Event / Competition</span>
+        </button>
+    </div>
 </div>
 
 <?php if (!$pagedCompetitions): ?>
     <div class="rounded-xl border border-slate-200 bg-white p-10 text-center text-sm text-slate-500 shadow-sm">No competitions match your filters.</div>
 <?php endif; ?>
 
-<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+<!-- ================= 1. TABLE FORM VIEW (ONE FORM TO ALL EVENTS) ================= -->
+<div id="comp-table-view" class="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <div class="border-b border-slate-100 p-4 dark:border-slate-800 flex items-center justify-between">
+        <div>
+            <h3 class="font-bold text-slate-900 dark:text-white">All Events &amp; Competitions Directory</h3>
+            <p class="text-xs text-slate-500">Comprehensive table listing of sports events, schedules, and active rosters.</p>
+        </div>
+        <button class="rounded-lg border border-slate-300 px-3 py-1 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300" type="button" data-export-table="#competitions-all-table" data-filename="all-events-competitions.csv">
+            Export CSV
+        </button>
+    </div>
+    <div class="overflow-x-auto">
+        <table id="competitions-all-table" class="w-full text-sm" data-enhance-table="false">
+            <thead class="bg-slate-50 dark:bg-slate-800">
+                <tr>
+                    <th class="table-th">ID</th>
+                    <th class="table-th">Event / Competition Name</th>
+                    <th class="table-th">Sport</th>
+                    <th class="table-th">Category</th>
+                    <th class="table-th">Level</th>
+                    <th class="table-th">Event Type</th>
+                    <th class="table-th">Venue</th>
+                    <th class="table-th">Dates</th>
+                    <th class="table-th">Participants</th>
+                    <th class="table-th">Status</th>
+                    <th class="table-th text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($pagedCompetitions as $compRow): ?>
+                    <?php
+                    $sClass = match ($compRow['status']) {
+                        'Ongoing' => 'status-active',
+                        'Completed' => 'status-neutral',
+                        default => 'status-pending',
+                    };
+                    ?>
+                    <tr class="border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
+                        <td class="table-td font-semibold text-slate-400">#<?= e((string)$compRow['id']) ?></td>
+                        <td class="table-td">
+                            <a class="font-bold text-slate-900 hover:text-blue-600 dark:text-white" href="<?= e(app_url('index.php?page=competition_manage&id=' . $compRow['id'])) ?>">
+                                <?= e($compRow['name']) ?>
+                            </a>
+                            <p class="text-xs text-slate-500"><?= e($compRow['organizer'] ?: 'School Organized') ?></p>
+                        </td>
+                        <td class="table-td font-medium"><?= e($compRow['sport_name'] ?: 'All Sports') ?></td>
+                        <td class="table-td"><?= e($compRow['category']) ?></td>
+                        <td class="table-td"><span class="status-pill status-neutral"><?= e($compRow['level']) ?></span></td>
+                        <td class="table-td"><?= e($compRow['event_type'] ?: '—') ?></td>
+                        <td class="table-td"><?= e($compRow['venue'] ?: '—') ?></td>
+                        <td class="table-td text-xs"><?= e(($compRow['start_date'] ?: 'TBD') . ' - ' . ($compRow['end_date'] ?: 'TBD')) ?></td>
+                        <td class="table-td font-bold text-slate-700 dark:text-slate-300">👥 <?= e((string)$compRow['participant_count']) ?></td>
+                        <td class="table-td"><span class="status-pill <?= e($sClass) ?>"><?= e($compRow['status']) ?></span></td>
+                        <td class="table-td text-right">
+                            <div class="flex justify-end gap-1.5">
+                                <a class="smis-cmd-btn primary text-xs" href="<?= e(app_url('index.php?page=competition_manage&id=' . $compRow['id'])) ?>">Manage</a>
+                                <button class="rounded-lg border border-slate-300 px-2 py-1 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300" type="button" data-modal-open="#competition-edit-modal-<?= e((string)$compRow['id']) ?>">Edit</button>
+                                <form method="post" action="<?= project_url('app/ajax/competition_ajax.php') ?>" data-ajax-form data-confirm="Delete this competition?">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="<?= e((string)$compRow['id']) ?>">
+                                    <button class="rounded-lg border border-rose-200 px-2 py-1 text-xs font-bold text-rose-600 hover:bg-rose-50" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ================= 2. CARDS GRID VIEW ================= -->
+<div id="comp-grid-view" class="hidden grid gap-4 md:grid-cols-2 xl:grid-cols-3">
     <?php foreach ($pagedCompetitions as $competitionRow): ?>
         <?php
         $statusClass = match ($competitionRow['status']) {
@@ -282,4 +366,34 @@ require __DIR__ . '/../../includes/header.php';
         </div>
     </div>
 <?php endforeach; ?>
+<script>
+function switchCompView(mode) {
+    const tableView = document.getElementById('comp-table-view');
+    const gridView = document.getElementById('comp-grid-view');
+    const btnTable = document.getElementById('btn-comp-table');
+    const btnGrid = document.getElementById('btn-comp-grid');
+
+    if (mode === 'grid') {
+        tableView.classList.add('hidden');
+        gridView.classList.remove('hidden');
+        btnGrid.className = 'rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-bold text-white transition';
+        btnTable.className = 'rounded-lg px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition';
+        localStorage.setItem('comp_view_mode', 'grid');
+    } else {
+        gridView.classList.add('hidden');
+        tableView.classList.remove('hidden');
+        btnTable.className = 'rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-bold text-white transition';
+        btnGrid.className = 'rounded-lg px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition';
+        localStorage.setItem('comp_view_mode', 'table');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('comp_view_mode');
+    if (saved === 'grid') {
+        switchCompView('grid');
+    }
+});
+</script>
+
 <?php require __DIR__ . '/../../includes/footer.php'; ?>

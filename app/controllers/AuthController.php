@@ -91,6 +91,20 @@ class AuthController
             redirect(app_url('register.php'));
         }
 
+        $phonePattern = '/^09\d{9}$/';
+        if (!preg_match($phonePattern, $contactNumber)) {
+            flash('error', 'Contact number must be exactly 11 digits starting with 09 (e.g. 09171234567).');
+            redirect(app_url('register.php'));
+        }
+        if ($guardianContact !== '' && !preg_match($phonePattern, $guardianContact)) {
+            flash('error', 'Guardian contact number must be exactly 11 digits starting with 09 (e.g. 09171234567).');
+            redirect(app_url('register.php'));
+        }
+        if ($emergencyContact !== '' && !preg_match($phonePattern, $emergencyContact)) {
+            flash('error', 'Emergency contact number must be exactly 11 digits starting with 09 (e.g. 09171234567).');
+            redirect(app_url('register.php'));
+        }
+
         $exists = $this->pdo->prepare('SELECT 1 FROM users WHERE email=? UNION SELECT 1 FROM athletes WHERE student_id=? LIMIT 1');
         $exists->execute([$email, $studentId]);
         if ($exists->fetchColumn()) {

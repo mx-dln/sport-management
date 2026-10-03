@@ -8,6 +8,13 @@ $reports = new ReportController($pdo);
 $counts = $reports->dashboardCounts();
 $upcoming = (new ScheduleController($pdo))->all(['date_from' => date('Y-m-d')]);
 $announcements = array_slice((new AnnouncementController($pdo))->all(), 0, 5);
+
+// Fetch recent athlete history records for the bottom section
+$recentHistory = [];
+try {
+    $histStmt = $pdo->query("SELECT ah.*, a.student_id, a.first_name, a.last_name, s.name AS sport_name FROM athlete_histories ah JOIN athletes a ON a.id = ah.athlete_id LEFT JOIN sports s ON s.id = ah.sport_id ORDER BY ah.created_at DESC LIMIT 8");
+    $recentHistory = $histStmt->fetchAll();
+} catch (Exception $e) {}
 $today = date('F j, Y');
 $statCards = [
     ['key' => 'athletes', 'label' => 'Total Athletes', 'hint' => 'Registered profiles', 'page' => 'athletes'],
@@ -84,7 +91,7 @@ require __DIR__ . '/../../includes/header.php';
             </div>
             <a class="text-sm font-semibold text-blue-600" href="<?= e(app_url('index.php?page=schedules')) ?>">Manage</a>
         </div>
-        <div class="divide-y divide-slate-100">
+        <div class="divide-y divide-slate-100 max-h-96 overflow-y-auto smis-scrollbar">
             <?php foreach (array_slice($upcoming, 0, 6) as $s): ?>
                 <article class="grid gap-3 p-5 sm:grid-cols-[110px_1fr_auto] sm:items-center">
                     <div class="rounded-xl bg-slate-50 p-3 text-center">
@@ -113,7 +120,7 @@ require __DIR__ . '/../../includes/header.php';
                 </div>
                 <a class="text-sm font-semibold text-blue-600" href="<?= e(app_url('index.php?page=announcements')) ?>">Open</a>
             </div>
-            <div class="space-y-3 p-5">
+            <div class="space-y-3 p-5 max-h-80 overflow-y-auto smis-scrollbar">
                 <?php foreach ($announcements as $a): ?>
                     <article class="rounded-xl bg-slate-50 p-4">
                         <h3 class="font-bold text-slate-950"><?= e($a['title']) ?></h3>
@@ -154,6 +161,83 @@ require __DIR__ . '/../../includes/header.php';
                 </div>
             </div>
         </section>
+    </div>
+</section>
+
+<!-- ================= BOTTOM ATHLETE HISTORY & ACHIEVEMENTS SECTION ================= -->
+<section id="admin-athlete-history" class="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <div class="flex flex-col gap-3 border-b border-slate-100 p-5 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
+        <div>
+            <div class="flex items-center gap-2">
+                <span class="grid h-7 w-7 place-items-center rounded-lg bg-amber-100 text-sm dark:bg-amber-950">🏆</span>
+                <h2 class="text-lg font-black text-slate-950 dark:text-white">Recent Athlete Achievements &amp; History</h2>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">Latest athletic milestones and competition entries recorded by varsity athletes.</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="<?= e(app_url('index.php?page=reports#history-report')) ?>" class="smis-cmd-btn primary">
+                View Full History Report
+            </a>
+            <a href="<?= e(app_url('index.php?page=history')) ?>" class="smis-cmd-btn">
+                Add History Record
+            </a>
+        </div>
+    </div>
+
+    <div class="max-h-80 overflow-y-auto smis-scrollbar">
+        <table class="w-full text-sm" data-enhance-table="false">
+            <thead class="bg-slate-50 dark:bg-slate-800 sticky top-0">
+                <tr>
+                    <th class="table-th">Student ID</th>
+                    <th class="table-th">Athlete Name</th>
+                    <th class="table-th">Competition</th>
+                    <th class="table-th">Sport &amp; Event</th>
+                    <th class="table-th">Level</th>
+                    <th class="table-th">Result / Medal</th>
+                    <th class="table-th text-right">Proof File</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($recentHistory as $rh): ?>
+                    <?php
+                    $mBadge = match ($rh['medal'] ?? '') {
+                        'Gold' => '🥇 Gold',
+                        'Silver' => '🥈 Silver',
+                        'Bronze' => '🥉 Bronze',
+                        default => $rh['medal'] ? e($rh['medal']) : 'Participant',
+                    };
+                    ?>
+                    <tr class="border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
+                        <td class="table-td font-semibold text-slate-600 dark:text-slate-400"><?= e($rh['student_id']) ?></td>
+                        <td class="table-td font-bold text-slate-950 dark:text-white">
+                            <a href="<?= e(app_url('index.php?page=athlete_print&id=' . $rh['athlete_id'])) ?>" class="hover:text-blue-600">
+                                <?= e($rh['last_name'] . ', ' . $rh['first_name']) ?>
+                            </a>
+                        </td>
+                        <td class="table-td font-medium"><?= e($rh['competition_name']) ?></td>
+                        <td class="table-td"><?= e($rh['sport_name'] ?: 'Sport') ?><?= $rh['event_name'] ? ' (' . e($rh['event_name']) . ')' : '' ?></td>
+                        <td class="table-td"><span class="status-pill status-neutral"><?= e($rh['competition_level']) ?></span></td>
+                        <td class="table-td font-semibold text-slate-800 dark:text-slate-200"><?= $mBadge ?><?= $rh['result'] ? ' - ' . e($rh['result']) : '' ?></td>
+                        <td class="table-td text-right">
+                            <?php if (!empty($rh['proof_file'])): ?>
+                                <a href="<?= e(app_url($rh['proof_file'])) ?>" data-attachment-preview data-attachment-url="<?= e(app_url($rh['proof_file'])) ?>" data-attachment-name="<?= e($rh['competition_name']) ?> Proof" class="text-xs font-bold text-blue-600 hover:underline">
+                                    View Proof
+                                </a>
+                            <?php else: ?>
+                                <span class="text-xs text-slate-400">—</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                <?php if (!$recentHistory): ?>
+                    <tr>
+                        <td class="table-td text-center text-slate-400 py-8" colspan="7">
+                            No athlete competition history entries recorded yet.
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
 </section>
 

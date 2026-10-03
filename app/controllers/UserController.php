@@ -30,6 +30,10 @@ class UserController
             return ['ok' => false, 'message' => 'Name and valid email are required.'];
         }
 
+        if ($phone !== '' && !preg_match('/^09\d{9}$/', $phone)) {
+            return ['ok' => false, 'message' => 'Phone number must be exactly 11 digits starting with 09 (e.g. 09171234567).'];
+        }
+
         if ($id > 0) {
             $stmt = $this->pdo->prepare('UPDATE users SET name=?, email=?, phone_number=?, role=?, status=? WHERE id=?');
             $stmt->execute([$name, $email, $phone, $role, $status, $id]);
