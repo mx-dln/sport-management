@@ -521,13 +521,17 @@ html.dark .scuaa-sheet .text-slate-900 {
             <div id="customize-panel" class="hidden mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-800/40">
                 <form method="get" action="<?= e(app_url('index.php')) ?>" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     <input type="hidden" name="page" value="athlete_gallery">
-                    <input type="hidden" name="sport_id" value="<?= e((string)$selectedSportId) ?>">
                     <input type="hidden" name="team_id" value="<?= e((string)$selectedTeamId) ?>">
                     <input type="hidden" name="category" value="<?= e($category) ?>">
 
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Event / Sport Name in Box</label>
-                        <input type="text" name="event_name" value="<?= e($eventName) ?>" class="form-input text-xs" placeholder="e.g. Softball, Basketball">
+                        <select name="sport_id" class="form-input text-xs" required>
+                            <option value="">Select event / sport</option>
+                            <?php foreach ($sports as $sport): ?>
+                                <option value="<?= e((string)$sport['id']) ?>" <?= (int)$selectedSportId === (int)$sport['id'] ? 'selected' : '' ?>><?= e($sport['name']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div>
