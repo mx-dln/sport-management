@@ -5,6 +5,10 @@ $userRole = $user['role'] ?? '';
 // Fetch active announcements / ticker items for the Roll Bar
 $rollBarItems = [];
 try {
+    if (!isset($pdo) || !$pdo instanceof PDO) {
+        require_once __DIR__ . '/../config/database.php';
+    }
+
     $annStmt = $pdo->query("SELECT title, body FROM announcements ORDER BY id DESC LIMIT 5");
     $annList = $annStmt->fetchAll();
     foreach ($annList as $ann) {
