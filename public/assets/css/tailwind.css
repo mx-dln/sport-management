@@ -52,6 +52,19 @@
         font-weight: 700 !important;
         text-align: left !important;
     }
+
+    .print-card.is-printing > article.is-print-target #athlete-report-table th:nth-child(1),
+    .print-card.is-printing > article.is-print-target #athlete-report-table td:nth-child(1),
+    .print-card.is-printing > article.is-print-target #coach-report-table th:nth-child(1),
+    .print-card.is-printing > article.is-print-target #coach-report-table td:nth-child(1),
+    .print-card.is-printing > article.is-print-target #sport-masterlist-table th:nth-child(1),
+    .print-card.is-printing > article.is-print-target #sport-masterlist-table td:nth-child(1),
+    .print-card.is-printing > article.is-print-target #missing-report-table th:nth-child(1),
+    .print-card.is-printing > article.is-print-target #missing-report-table td:nth-child(1),
+    .print-card.is-printing > article.is-print-target #history-achievements-table th:nth-child(1),
+    .print-card.is-printing > article.is-print-target #history-achievements-table td:nth-child(1) {
+        display: none !important;
+    }
     .print-card.is-printing > article.is-print-target #history-achievements-table {
         table-layout: auto !important;
         font-size: 8pt !important;

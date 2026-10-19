@@ -25,9 +25,18 @@ function decode_secret(string $value): string
 
 function sendSMS(string $phone, string $message): array
 {
+    $settings = app_settings();
     $configPath = __DIR__ . '/../config/sms.php';
     $examplePath = __DIR__ . '/../config/sms.example.php';
-    $config = require (is_file($configPath) ? $configPath : $examplePath);
+    $legacyConfig = require (is_file($configPath) ? $configPath : $examplePath);
+    $hasSettingsConfig = ($settings['semaphore_api_key'] ?? '') !== '' || ($settings['semaphore_sender_name'] ?? '') !== '' || ($settings['semaphore_endpoint'] ?? '') !== '';
+    $config = $hasSettingsConfig ? [
+        'provider' => $settings['semaphore_provider'] ?? 'Semaphore',
+        'api_key' => $settings['semaphore_api_key'] ?? '',
+        'sender_name' => $settings['semaphore_sender_name'] ?? '',
+        'endpoint' => $settings['semaphore_endpoint'] ?? 'https://api.semaphore.co/api/v4/messages',
+        'enabled' => ($settings['semaphore_enabled'] ?? '0') === '1',
+    ] : $legacyConfig;
 
     if (!$config['enabled']) {
         return [

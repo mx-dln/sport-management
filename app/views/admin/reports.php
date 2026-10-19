@@ -21,6 +21,31 @@ $medalsByYear = $historyController->medalsByYear();
 $allSports = (new SportController($pdo))->all();
 $today = date('F j, Y');
 
+$renderReportPrintBanner = static function (string $reportTitle, string $generatedDate): void {
+    ?>
+    <header class="report-print-banner">
+        <div class="report-print-banner-inner">
+            <div class="report-print-brand">
+                <?php if (app_icon_url()): ?>
+                    <img class="report-print-logo" src="<?= e(app_icon_url()) ?>" alt="<?= e(app_setting('app_name')) ?> icon">
+                <?php else: ?>
+                    <div class="report-print-logo-placeholder"><?= e(substr(app_setting('app_short_name', 'SMIS'), 0, 4)) ?></div>
+                <?php endif; ?>
+                <div>
+                    <p class="report-print-app"><?= e(app_setting('app_name')) ?></p>
+                    <h1><?= e(school_name()) ?></h1>
+                    <p class="report-print-title"><?= e($reportTitle) ?></p>
+                </div>
+            </div>
+            <div class="report-print-date">
+                <p>Generated</p>
+                <strong><?= e($generatedDate) ?></strong>
+            </div>
+        </div>
+    </header>
+    <?php
+};
+
 // Coaches Query
 $coachesStmt = $pdo->query("
     SELECT u.id, u.name, u.email, u.phone_number, u.status, u.created_at,
@@ -170,7 +195,88 @@ html.dark .report-section-toggle {
 .report-section-toggle-icon {
     transition: transform 0.16s ease;
 }
+.report-print-banner {
+    display: none;
+}
 @media print {
+    .report-print-banner {
+        display: block !important;
+        margin-bottom: 8mm !important;
+        border-bottom: 1px solid #cbd5e1 !important;
+        padding-bottom: 5mm !important;
+        break-inside: avoid !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .report-print-banner-inner {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8mm !important;
+        background: #fff !important;
+        color: #0f172a !important;
+        padding: 0 !important;
+    }
+    .report-print-brand {
+        display: flex !important;
+        align-items: center !important;
+        gap: 4mm !important;
+    }
+    .report-print-logo,
+    .report-print-logo-placeholder {
+        width: 15mm !important;
+        height: 15mm !important;
+        border-radius: 0 !important;
+        background: #fff !important;
+        object-fit: contain !important;
+        padding: 0 !important;
+        color: #0f172a !important;
+        display: grid !important;
+        place-items: center !important;
+        font-weight: 900 !important;
+        font-size: 9pt !important;
+    }
+    .report-print-app {
+        margin: 0 !important;
+        color: #334155 !important;
+        font-size: 8pt !important;
+        font-weight: 800 !important;
+        text-transform: uppercase !important;
+        letter-spacing: .04em !important;
+    }
+    .report-print-banner h1 {
+        margin: 1mm 0 0 !important;
+        color: #0f172a !important;
+        font-size: 16pt !important;
+        line-height: 1.05 !important;
+        font-weight: 900 !important;
+    }
+    .report-print-title {
+        margin: 1mm 0 0 !important;
+        color: #475569 !important;
+        font-size: 9pt !important;
+        font-weight: 700 !important;
+    }
+    .report-print-date {
+        border-radius: 0 !important;
+        background: #fff !important;
+        border-left: 1px solid #cbd5e1 !important;
+        padding: 0 0 0 5mm !important;
+        text-align: right !important;
+        min-width: 34mm !important;
+    }
+    .report-print-date p {
+        margin: 0 !important;
+        color: #64748b !important;
+        font-size: 7pt !important;
+        text-transform: uppercase !important;
+    }
+    .report-print-date strong {
+        display: block !important;
+        margin-top: 1mm !important;
+        color: #0f172a !important;
+        font-size: 10pt !important;
+    }
     .report-section.is-collapsed [data-report-body],
     .report-section.is-collapsed > .data-table-toolbar,
     .report-section.is-collapsed > .data-table-pager {
@@ -189,6 +295,7 @@ html.dark .report-section-toggle {
 
     <!-- ================= 1. ATHLETE MASTER LIST ================= -->
     <article id="athlete-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <?php $renderReportPrintBanner('Athlete Master List', $today); ?>
         <div data-report-header class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
             <div>
                 <h2 class="text-lg font-bold text-slate-950 dark:text-white">Athlete Master List</h2>
@@ -230,6 +337,7 @@ html.dark .report-section-toggle {
 
     <!-- ================= 2. MASTER LIST OF COACHES (PRINT COACHES) ================= -->
     <article id="coach-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <?php $renderReportPrintBanner('Master List of Coaches', $today); ?>
         <div data-report-header class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
             <div>
                 <h2 class="text-lg font-bold text-slate-950 dark:text-white">Master List of Coaches</h2>
@@ -282,6 +390,7 @@ html.dark .report-section-toggle {
 
     <!-- ================= 3. MASTERLIST PER SPORT (GENERATE REPORTS, PRINTABLE, SCAN/UPLOAD) ================= -->
     <article id="sport-masterlist-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <?php $renderReportPrintBanner($selectedSportObj ? $selectedSportObj['name'] . ' Masterlist' : 'Masterlist Per Sport & Document Compliance', $today); ?>
         <div data-report-header class="flex flex-col gap-4 border-b border-slate-100 p-5 md:flex-row md:items-center md:justify-between dark:border-slate-800">
             <div>
                 <div class="flex items-center gap-2">
@@ -371,6 +480,7 @@ html.dark .report-section-toggle {
 
     <!-- ================= 4. TRAINING SCHEDULE REPORT ================= -->
     <article id="schedule-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <?php $renderReportPrintBanner('Training Schedule Report', $today); ?>
         <div data-report-header class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
             <div>
                 <h2 class="text-lg font-bold text-slate-950 dark:text-white">Training Schedule Report</h2>
@@ -405,6 +515,7 @@ html.dark .report-section-toggle {
 
     <!-- ================= 5. MISSING REQUIREMENTS REPORT ================= -->
     <article id="missing-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <?php $renderReportPrintBanner('Missing Requirements Report', $today); ?>
         <div data-report-header class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
             <div>
                 <h2 class="text-lg font-bold text-slate-950 dark:text-white">Missing Requirements Report</h2>
@@ -439,6 +550,7 @@ html.dark .report-section-toggle {
 
     <!-- ================= 6. ATHLETIC HISTORY & ACHIEVEMENTS ================= -->
     <article id="history-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <?php $renderReportPrintBanner('Athletic History & Achievements', $today); ?>
         <div data-report-header class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
             <div>
                 <h2 class="text-lg font-bold text-slate-950 dark:text-white">Athletic History &amp; Achievements</h2>
@@ -475,6 +587,7 @@ html.dark .report-section-toggle {
 
     <!-- ================= 7. SMS LOGS REPORT ================= -->
     <article id="sms-report" data-report-section class="report-section is-collapsed overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <?php $renderReportPrintBanner('SMS Logs Report', $today); ?>
         <div data-report-header class="flex items-center justify-between gap-3 border-b border-slate-100 p-5 dark:border-slate-800">
             <div>
                 <h2 class="text-lg font-bold text-slate-950 dark:text-white">SMS Logs Report</h2>

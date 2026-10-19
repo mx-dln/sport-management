@@ -16,6 +16,7 @@ $options = [
 
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
+    $pdo->exec("SET time_zone = '+08:00'");
 } catch (PDOException $e) {
     http_response_code(500);
     exit('Database connection failed. Check app/config/database.php and import database/sports_management.sql.');

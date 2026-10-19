@@ -113,6 +113,19 @@ function app_settings(): array
         'school_name' => 'School / Client Name',
         'theme_color' => '#2563eb',
         'icon_path' => '',
+        'semaphore_enabled' => '0',
+        'semaphore_provider' => 'Semaphore',
+        'semaphore_endpoint' => 'https://api.semaphore.co/api/v4/messages',
+        'semaphore_api_key' => '',
+        'semaphore_sender_name' => '',
+        'smtp_enabled' => '0',
+        'smtp_host' => '',
+        'smtp_port' => '587',
+        'smtp_encryption' => 'tls',
+        'smtp_username' => '',
+        'smtp_password' => '',
+        'smtp_from_email' => '',
+        'smtp_from_name' => '',
     ];
     $path = __DIR__ . '/../config/system_settings.json';
     if (!is_file($path)) {

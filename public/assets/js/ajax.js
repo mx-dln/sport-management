@@ -1,3 +1,14 @@
+function buildAjaxFormData(form, submitter = null) {
+    let formData;
+    try {
+        formData = submitter ? new FormData(form, submitter) : new FormData(form);
+    } catch (error) {
+        formData = new FormData(form);
+    }
+    if (submitter?.name) formData.set(submitter.name, submitter.value);
+    return formData;
+}
+
 function setButtonLoading(button, loading, text = 'Saving...') {
     if (!button) return;
     if (loading) {
@@ -23,7 +34,7 @@ document.addEventListener('submit', async (event) => {
         return;
     }
 
-    const button = form.querySelector('button[type="submit"], button:not([type]), input[type="submit"]');
+    const button = event.submitter || form.querySelector('button[type="submit"], button:not([type]), input[type="submit"]');
     setButtonLoading(button, true, button?.dataset.loadingText || 'Saving...');
     startTopProgress();
 
@@ -32,7 +43,7 @@ document.addEventListener('submit', async (event) => {
     try {
         const response = await fetch(form.getAttribute('action'), {
             method: form.method || 'POST',
-            body: new FormData(form),
+            body: buildAjaxFormData(form, event.submitter),
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         });
         const text = await response.text();

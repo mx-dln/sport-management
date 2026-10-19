@@ -4,5 +4,18 @@
     "app_version": "1.9.0",
     "school_name": "Isabela State University",
     "theme_color": "#006738",
-    "icon_path": "uploads/branding/12ab9e0b76b15fd2_622685015_925666030131412_6886851389087569993_n-removebg-preview.png"
+    "icon_path": "uploads/branding/12ab9e0b76b15fd2_622685015_925666030131412_6886851389087569993_n-removebg-preview.png",
+    "semaphore_enabled": "1",
+    "semaphore_provider": "Semaphore",
+    "semaphore_endpoint": "https://api.semaphore.co/api/v4/messages",
+    "semaphore_api_key": "base64:N2MwYzM1MjdjZDBkOTI3OWEwYjIyYTUxN2RkMzA3YWU=",
+    "semaphore_sender_name": "base64:REV4cHJlc3M=",
+    "smtp_enabled": "1",
+    "smtp_host": "canopus.verahost.ph",
+    "smtp_port": "587",
+    "smtp_encryption": "tls",
+    "smtp_username": "support@isu-sports.online",
+    "smtp_password": "base64:akxRJlRWSkhAbSkoTkkydQ==",
+    "smtp_from_email": "support@isu-sports.online",
+    "smtp_from_name": "Sports Management Information System"
 }

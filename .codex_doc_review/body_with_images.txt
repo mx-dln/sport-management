@@ -1,0 +1,239 @@
+Web – Based Sports Management Information  System with SMS Notification
+A Capstone Project Presented to the Faculty of the
+College of Computing Studies, Information and
+Communication Technology
+Isabela State University
+Cauayan Campus
+In Partial Fulfillment of the Requirements for the Degree
+Bachelor of Science in Information Technology
+Arevalo, Johanah F.
+Aggabao, Iris Mishelle F.
+Venturina, Arvin Jay F.
+July 2026
+Chapter I
+Introduction
+Project Context
+In the current generation, technology has become very essential part of life that helps different organizations establish effective methods that could improve and elevate the way they communicate and manage information with ease. This is especially vital in sports management since there are different kinds of data, which must be organized and updated regularly. Athlete registration, records, and training, plus announcements are some of the information that are normally handled by the coach or administrator of a sports team. It is not easy to organize and update paper-based records of different types of information, hence the need to design and develop a web-based system to address this limitation.
+A Web-Based Sports Management Information System with SMS Notification is proposed so that sports-related information, such as trainings, games, schedules, and important announcements can be managed digitally, which can make it easier and more efficient for coaches and administrators to update and monitor the records and needs of the athletes in their school or organization. This is because the SMS notification feature can also be used to relay important information, which can reach the intended recipients through their mobile phones.
+In addition to this, the proposed system can also be utilized to improve the way the sports organization manages and monitors its records and information. It can ease the process of updating and viewing the data without the use of paper and pencil since everything is organized in a database. SMS notification can also help inform the students or athletes of a particular
+sports team regarding their training schedules, meetings, updates, and other important information.
+Therefore, this study will design and develop a Web-Based Sports Management Information System with SMS Notification to provide a more efficient and reliable way of managing information and interacting with each other within a sports organization.
+Objectives of the Study
+The primary goal of this study is to Design, Develop, and Implement a Web-based Sports Management Information System with SMS Notification that will enhance the management and organization of the information of the athletes and provide a more efficient way of communicating to them.
+Specifically, this study aims to:
+1. Develop a web-based Sports Management Information System for managing athlete profiles, attendance, schedules, and performance records.
+2. Integrate an SMS notification feature for timely communication with athletes and sports staff.
+3. Evaluate the system using selected ISO/IEC 25010:2023 software quality characteristics.
+a. Functional Suitability;
+b. Usability;
+c. Reliability; and
+d. Security;
+Scope and Limitations
+This study aimed to design and develop a web-based sports management information system with SMS notification for the Sports Department of Isabela State University. This proposed system would address the needs of coaches and sports administrators in terms of managing sports-related data conveniently and efficiently. It would provide an online platform that allows the authorized users to store, update, and track information pertaining to the athlete’s profile, attendance, training, sports events,and other pertinent records.
+The proposed system will only handle the management of ISU Athletes and SMS notification for sports-related activities. It will not incorporate other essential functions, such as biometric and other wearable devices, online registration for external sports events,financial management, and others. The application’s success relies on cellular network providers access and the accuracy of the contact details of the users provided in the system database. Moreover, it needs internet access to update and access the database.
+Chapter II
+REVIEW OF RELATED LITERATURE AND STUDIES
+This chapter presents the relevant literature and studies that the researcher considered in strengthening the importance of the present study. It also presents the synthesis of the art to fully understand the research for better comprehension of the study
+Related Literature
+According to Thomas Blobel et al. (2021), sports information systems help organizations manage athlete data, training records, and performance monitoring more efficiently through digital platforms. The study emphasized that centralized systems improve accessibility and decision-making in sports organizations. This literature is related to the present study because the proposed Web-Based Sports Management Information System aims to organize athlete information in one database for easier monitoring and management.
+A study by N.M. Kalantarli et al. (2021) discussed the importance of information technology in sports management. The researchers explained that digital systems improve communication, record management, and operational efficiency in sports organizations. The study supports the current research because the proposed system uses web technologies to improve sports management processes and athlete record handling.
+Nicholas M. Watanabe et al. (2021) highlighted the growing use of big data and analytics in sports management. Their study explained that digital systems help organizations collect and analyze athlete information for better planning and decision-making. This literature is relevant to the present study because the proposed system also stores and manages athlete records digitally to improve efficiency and monitoring.
+According to Fabio Fonti et al. (2023), sports data and digital management systems are becoming important tools in organizational management and research. The study emphasized that properly organized sports data can support better decision-making and improve management strategies. This supports the present study because the proposed system aims to provide organized and accessible athlete information through a web-based platform.
+A study conducted by Micheal Ajinaja (2023) focused on the development of a Web-Based Sport Management System with Short Message Service (SMS) notification. The study showed that SMS notifications improve communication by sending updates and reminders directly to users. This literature is highly related to the present study since the proposed system also integrates SMS notifications for announcements, schedules, and reminders to athletes and coaches.
+According to the study “Integrated Sports Information Systems: Enhancing Data Processing and Information Provision for Sports in Slovakia” (2024), integrated sports systems improve the efficiency of data processing, information management, and communication within sports organizations. The researchers emphasized that information systems help reduce delays and improve accessibility of records. This literature supports the present study because the proposed system also aims to improve athlete data management and communication through a centralized web-based platform.
+A 2025 study entitled “Enhanced Mobile-Based Records Management and E-Payment with SMS Notification” explained that SMS notification features help improve communication efficiency and provide timely updates to users. The study also showed that digital systems reduce delays and improve accessibility of information. This is related to the current study because the proposed system includes SMS notification features for sports-related announcements and reminders.
+According to a 2025 study on web-based management information systems in educational institutions, digital systems help improve efficiency, transparency, and accessibility in managing records and administrative tasks. The study emphasized the importance of web-based platforms in reducing manual processes and improving information management. This literature is related to the present study because the proposed system also focuses on improving sports management through a web-based information system.
+A 2021 research study about Sports Management System (SMS) explained that web-based sports systems help manage tournaments, athlete registration, schedules, and notifications more efficiently. The study highlighted that notification features improve communication between coordinators and participants. This supports the present study because the proposed system also includes athlete management and SMS notification features to improve communication and organization.
+According to a 2022 study on web-based management information systems, digital platforms improve the accuracy, security, and accessibility of records management. The researchers stated that web-based systems reduce manual work and make monitoring easier for administrators and users. This literature is connected to the current study because the proposed system also aims to provide an organized, secure, and efficient platform for sports management and athlete monitoring.
+Related Studies
+Rathnayake (2021)  developed the “KDMV Sports Desk” Web-Based System for School Sports and Athlete Management. The study started from a simple but common problem: managing school sports manually was becoming difficult and inefficient. The researchers created a web-based system where information about students, sports, events, instructors, tournaments, and reports could be managed in one place. The system also included email notifications about students' sports activities for parents or guardians.
+Wang and Park (2021) developed an intelligent sports management system for college students in 2021. The system used a browser/server structure and was designed to improve the management of sports facilities and training activities. Students could access sports programs, courses, venue information, reservations, news, notices, and messages through the system. The researchers found through functional testing that the system could operate effectively.
+Villanueva et al. (2023) developed a QR Code-Based Patient Record Management System with SMS notification. The researchers used descriptive-developmental research to design a system that could manage records and send updates through SMS. Findings revealed that the system improved data accessibility, monitoring, and communication. The study recommended regular system maintenance and proper data management to ensure accuracy. This study is related because both systems aim to improve record management and communication using SMS technology.
+Sports Information Systems (2021)  systematic review examined different types of Sports Information Systems (SIS) and Athlete Management Systems (AMS). The review explained that these systems are used to collect, store, organize, and manage information related to athletes and sports organizations. It also showed that athlete management systems can help organizations document information about individual athletes and groups.
+Masuudi (2022) developed a web-based Sports Management Information System for Buddo Secondary School in Uganda. The study identified problems in the school's existing manual system, including delays, difficulty retrieving information, loss of data, and delays in informing students about tournaments. The proposed system was designed to manage player information, sports activities, tournaments, and historical records. It was developed using technologies such as PHP, HTML, MySQL, and an Apache web server.
+Hertikasari, Sugiharto, and Kusuma (2022) developed a website-based Management Information System and athlete database for PBSI in Kendal Regency in 2022. The researchers worked with administrators, club administrators, coaches, and athletes. Their objective was to create a system that could make data entry easier and allow users to find athlete information more efficiently. The system could be accessed through computers and smartphones. Testing showed “Good” results for the small-group evaluation and “Very Good” results for the large-group evaluation.
+Clarin (2020) developed a web-based information system portal with SMS support for a university. The study used software development methods to improve accessibility of records and communication between students and school personnel. The findings revealed that SMS support improved the delivery of important announcements and updates. The study recommended improving internet connectivity and maintaining accurate user information. This study is connected because the proposed system also aims to improve communication and record management in an educational institution.
+Peñasales, Soberano, and Algara (2023) developed the E-Board Sports Management Information System with SMS Support at Northern Negros State College of Science and Technology in the Philippines in 2023. The researchers created the system to manage the sports offered by the school and included SMS support as part of the system. They evaluated the system based on usability, maintainability, and accuracy. The results showed that the system performed very well in these areas.
+Ajinaja (2023)  developed the Web-Based Sport Management System with Short Message Service Notification (WBSMS) for the sports unit of Federal Polytechnic Ile-Oluji in Nigeria. The study identified a major problem with manually collecting, managing, and distributing sports information because there was no central repository. The developed system allowed students to register, manage their information, receive tournament assignments, and interact with sports records. Administrators could manage students, tournaments, equipment, and send SMS notifications when students were assigned to tournaments.
+Varmus et al. (2024)  and colleagues studied Integrated Sports Information Systems in Slovakia and compared sports information systems in Slovakia, the Czech Republic, England, and Denmark. Their study explained that integrated systems can improve data management and support decision-making. However, they also identified problems such as duplicated data, inefficient processes, and the amount of time required to manage sports information.
+Different studies about web-based management system with SMS notification were examined to determine the relationship between integrating SMS services into online systems as well as the benefits it brings to the management process. Most researchers utilized developmental and descriptive research in designing their projects. Studies concluded that implementing an SMS notification system in web-based systems enabled faster delivery of information to the target audience. Likewise, databases were found to be of paramount essence as they helped organize the information retrieved easily and efficiently. Most researchers advised constant updates of the system, efficient database management, and a good internet connection to enhance the performance of such a system. Thus, the above findings corroborate the rationale of this study, which sought to develop a Web-Based Sports Management Information System with SMS Notification.
+CONCEPT OF THE STUDY
+[IMAGE 1: media/image1.jpeg]
+Figure 1. Conceptual Framework of Web-Based Sports Management Information System
+with SMS Notification
+The IPO framework presents how the proposed system will transform the raw information of the athlete. The input of the system includes the athlete’s profile, training, attendance, performance, event, medical, and athletic history records. These sets of data go through the process of data collection and encoding, record management, monitoring of schedules, SMS reminder, report generation, medical record management, and athletic history management. These processes will organize and compile the data to help the sports office monitor and manage the athletes efficiently. The system’s output will consist of organized athlete’s profile, attendance and performance reports, training and event’s progress, SMS alert and reminder, medical records reports, and athletic history report. Altogether, the framework will demonstrate how the proposed system can manage, monitor, report, and communicate the athlete’s information more effectively.
+Chapter III
+DESIGN AND METHODOLOGY
+Requirement Analysis
+Data Flow Diagram
+[IMAGE 2: media/image2.jpeg]
+Figure 2. Data Flow Diagram of Web-Based Sports Management Information System with SMS Notification
+The Level 0 DFD illustrates how information flows between the user and the Web-based Sports Management Information System. It displays the primary functions of the Web-based Sports Management Information System and its relationships with external entities. The primary functions are managing athlete profiles, managing teams and schedules, maintaining attendance, keeping medical and athletic records. Managing teams and schedules involves handling of athlete’s profile and documents, team records, and schedule. The diagram indicates that the organization will use the Semaphore SMS Service to send reminders, announcements, and other important information to the Athlete, Coach, and Admin/Sports Coordinator. On the other hand, the Level 1 DFD goes deeper and displays the processes, data flows, and data stores involved in the Web-based Sports Management Information System. Some of the processes involved include user registration, managing an athlete’s profile and documents, managing teams and schedules, attendance, SMS services, medical records, and competition records. The two levels of DFDs show how the Web-based Sports Management Information System stores, processes, and shares sports-related information and enhances the management of records and communication in the sports office, coaches, and athletes.
+Fishbone Diagram
+[IMAGE 3: media/image3.jpg]
+Figure 3. Data Flow Diagram of Web-Based Sports Management Information System with SMS Notification
+The Fishbone Diagram below represents the various problems experienced within the current manual management of the sports programs. The issues were grouped according to Materials, Methods, Communication, People, Environment, and Machines. According to the diagram, such problems as scattered information, time-consuming, difficult tracking, lack of accessibility, and slow communication dominate the management process. Therefore, it can be concluded that the new system needs to offer a centralized and easy-to-access platform storing all athletes’ data, records, schedules, and other relevant information available in electronic form. In addition, it was vital to add an option of quick and convenient communication via SMS notification.
+Timeline of the Project
+Gantt Chart
+[IMAGE 4: media/image4.png]
+Figure 4.  Gantt Chart of Web-Based Sports Management Information System with SMS Notification
+Our Gantt chart below indicates the scheduling of activities involved in developing our Web-Based Sports Management Information System with SMS Notification from July to December 2026. Our first task was planning and requirement gathering to understand the problem and requirements from the user’s perspective. We proceeded to design the database, interface, and system structure and then developed the software modules. The next thing to do after development is testing and error fixing, followed by software’s deployment and completion of the project documentation. The chart below helps us manage our time to ensure that we meet all the deadlines for our project activities.
+Requirements Documentation
+Technical Background
+The Sports Office in Isabela State University (ISU) deals with various information about the athletes such as profile, training, medical records, participation lists, attendance, and performances. The Sports Office has been manually handling this kind of information which sometimes requires a long time in processing and updating data records. This is why a database is necessary to make the process of the Sports Office more efficient and convenient in terms of managing and retrieving information.
+The proposed Web-Based Sports Management Information System with SMS Notification will provide a web application as a platform to store and manage sports records. The Sports Office will be assisted by the system in terms of facilitating and organizing the information of the athletes with the help of a database where the data can be easily accessed, updated, and viewed.
+The system will also include an SMS notification system that will aid the Sports Office in informing the athletes about sports-related concerns such as schedule, competitions, announcements, and other concerns. This will assist in reducing the time the Sports Office spends in communicating with the athletes.
+Materials
+Software
+The system is developed as a web-based application and therefore requires a software stack capable of serving dynamic pages, storing relational data, and delivering an interactive front end. The table below list the software tools and technologies employed in the construction of the system.
+[TABLE]
+Software | Purpose
+XAMPP | Local web server and database environment
+PHP | Backend programming and server-side processing
+MySQL | Relational database management
+P hpMyAdmin | Database administration and SQL import
+HTML5 | Frontend page structure
+CSS3/ Tailwind CSS | Interface styling and responsive layout
+JavaScript | Frontend functionality and interactivity
+AJAX (Fetch API) | A synchronous data exchange without page reloads
+Semaphore SMS API ( Curl) | SMS notification logging and integration
+Visual Studio Code | Development environment
+Google Chrome | Browser testing
+Mozilla Firefox | Cross -browser testing
+Adobe Acrobat / PDF Viewer | Viewing exported and uploaded PDF documents
+Table 1: Software Requirements
+The software requirements of the system are primarily driven by its architectural design, which employs native PHP with PDO prepared statements as the server-side technology and MySQL as the relational database. Tailwind CSS, loaded through a content delivery network, is used to standardize the visual appearance of interfaces, while plain JavaScript and asynchronous AJAX request enable real-time interaction such as from submission, status updating, and document notification. The development environment is hosted locally using XAMPP, which bundles Apache, PHP, and MySQL, and the design is supplemented by the utility tools such as php MyAdmin for database administration, Visual Studio Code as the editor, and modern web browsers for compatibility testing. The Semaphore SMS helper extends the system`s functionality by allowing notification to be either transmitted or logged, depending on the configured integration state. Together, this software tools provide a complete, low-cost foundation for developing and operating the system.
+[TABLE]
+Hardware | Minimum Specification
+Development Computer/Laptop | Windows 11 Pro 64-bit; AMD Ryzen 7 5700G (8 cores, 16 threads); 15.4 GB RAM; at least 80 FB free storage; XAMPP ( Apache,PHP , MySQL) capable
+Client Computer | Dual-core processor; 4 GB RAM; 20 GB free storage; modern web browser (Chrome or Firefox); network adapter
+Server Machine | Shared web hosting server with PHP and MySQL support; remote MySQL host with sufficient storage for database and uploaded files
+Router/Network Setup | LAN or stable Internet connection enabling client-server communication
+Printer | For printing schedules and reports, if applicable
+Backup Storage | External drive or cloud storage for system and database backups
+Hardware
+The system relies on hardware capable of running the development environment during construction, hosting the application during deployment, and providing reliable access for end users. The table below specifies the minimum hardware requirements for each component of the system environment.
+Table 2: Hardware Requirements
+The hardware configuration is sufficient for the successful deployment and operation of the system. The development machine used to build the system provides more than enough processing power, memory, and storage to run XAMPP, the integrated development environment, and the browser simultaneously without noticeable performance degradation. Client computers require only modest specifications since the system is browser-based, and all heavy processing is carried out by the server. The application is hosted on a shared web hosting platform that supplies the required PHP execution engine and remote MySQL database service, eliminating the need for dedicated on-premises server hardware. A network connection is sufficient to connect clients to the application, while a printer and backup storage support the reporting and data-retention requirements of the institution. As such, the stated hardware satisfies both developmental and operational needs.
+Data
+The system stores and manages a wide range of data necessary for athlete profiling, sports and team management, scheduling, attendance monitoring, and record keeping. The table below defines the major data entities maintained by the system, which are organized in its relational database.
+[TABLE]
+Data Type | Desc ri ption
+User Account Data | User accounts, login credentials, roles (admin, sports coordinator, coach , athlete), and active or inactive status
+Athlete Biodata Data | Student ID, person al details, course, year level, section, contact numbers, guardian and emergency contacts, physical attributes, and athlete stat us
+Sports Data | Sport name, description, and active or inactive status
+Team Data | Team name, associated sport, assigned coach, description, and status
+Team Membership Data | Athlete-to-team assignments within the system
+Document Requirement Data | Document requirement types and whether each is mandatory
+Athlete Document Data | Uploaded requirement documents, file references, approval or rejection status, and remarks
+Form Template Data | Downloadable form template files together with their titles and descriptions
+Training Schedule Data | Sport, team, coach, training date, start and end times, venue, description, and schedule status
+Attendance Data | Per-schedule athlete attendance entries with present, absent, late, or excused status and remarks
+Medical Record Data | Athlete vitals, medical conditions, allergies, clearance status, physician details, and medical certificates
+Competition Data | Competition name, sport, category, level, venue, organizer, dates, registration deadline, and status
+Competi t ion Parti cipation Data | Athletes entered into competitions with event names and jersey or bib numbers
+Competi tion Result Data | Rank, medal, score or time, and result status per competition entry
+Athletic History Data | Records of past competitions, levels, results, medals, and proof files
+Announcement Data | Announcement titles, bodies, optional sport and team targeting, and sender information
+SMS Log Data | Logged SMS messages with recipient names, phone numbers, message content, and transmission status
+System Settings Data | Configurable settings such as application name, school name, theme color, version, and branding icon
+Table 3: Data Requirements
+The data stored by the system comprehensively supports its core operations. User accounts implement role-based access control, ensuring that administrators, sports coordinators, coaches, and athletes interact only with the modules pertinent to their responsibilities. Athlete biodata, sports, team, and team membership records provide the structural foundation for profiling and organization, while document and form template data support the compliance and record-keeping needs of the institution. Training schedules and attendance records enable the monitoring of athlete participation, and medical records safeguard athlete welfare by tracking physical fitness and clearance status. Competition, participation, result, and athletic history data collectively document the competitive achievements of athletes, and announcement, SMS log, and system settings data support communication and configuration. Taken together, these data entities form a complete and organized information system that fulfills the requirements of the institution.
+Use case Diagram
+[IMAGE 5: media/image5.jpeg]
+Figure 5. Use case diagram of Web-Based Sports Management Information  System with SMS Notification
+This Use Case Diagram was created to illustrate the connection and interaction between the Administrator and Athlete/Coach with the proposed system. Administrator will be handling all the accounts, teams, schedules, records, reports, and SMS notifications while the Athlete or Coach can access the registration, schedules, statistics, medical records, and athletic history. SMS Gateway is utilized to notify the users about the important information through SMS. In general, the new system can minimize the effort needed to process and manage sports-related data and events while providing an organized way of gathering and distributing necessary information to the participants.
+Functional Decomposition Diagram
+[IMAGE 6: media/image6.jpeg]
+Figure 6. Functional Decomposition Diagram of Web-Based Sports Management Information  System with SMS Notification
+The proposed Web-Based Sports Management Information System with SMS Notification consists of eleven (11) modules in total. The first module is the User Management, which is responsible for the registration, login, and user-related tasks in the system. The Athlete Management module maintains the information of the sports school’s athletes. On the other hand, the Medical Records module is designed to store and manage medical and injury details of the athletes while Athletic History is intended for the records, history, and achievements of the said sports school athletes. The Team Management module caters to the records of the teams, members, and their respective coaches. Moreover, the Schedule Management module stores and manages the training and event schedules of the sports school. The Attendance Management module keeps track of the attendees in an event while Performance Management is responsible for the monitoring and evaluation of the athletes’ performance and progress. The next module is SMS Notification, which serves as the medium of the sports school to deliver important announcements to the staff and athletes. Lastly, the Reports module allows the sports office to view, generate, export, and print relevant reports as needed. Meanwhile, the System Settings module is designed for the system setup, database setup, back-up, and SMS gateway setup. Thus, the proposed information system would minimize the effort of the sports office in terms of athlete’s data management, monitoring, and evaluation. Similarly, the information system would facilitate a better coordination between the sports office, coaches, staff, and the athletes.
+System Flowchart
+[IMAGE 7: media/image7.jpeg]
+Figure 7. System Flowchart of Web-Based Sports Management Information System with SMS Notification
+The flowchart below represents the general flow of the Web-Based Sports Management Information System with SMS Notification. It begins with the login and validation of the user, and it leads to the dashboard depending on the authority of the user. The Admin manages users, athletes, teams, schedules, reports, system, medical records, and athletic history. The Coach manages trainings and schedules, attendance and performance, announcements, and medical records, and athletic history. The Athlete manages their profile, schedules, attendance, and performance, receives SMS notification, and view/add/delete medical records and athletic history. The system also sends and stores announcements, reminders, and SMS gateway. It also stores user profiles, teams, schedules, attendance, performance, medical records, athletic history, and SMS logs in the database. In general, the Web-Based Sports Management Information System with SMS Notification will provide a more organized and convenient way of managing the information of the athlete, which will improve the overall communication of the administrator, coaches, and the athlete.
+Entity-Relationship Diagram
+[IMAGE 8: media/image8.jpeg]
+Figure 8. Entity Relationship Diagram for Web-Based Sports Management Information  System with SMS Notification
+The Entity Relationship Diagram below represents the general database structure of the proposed Web-Based Sports Management Information System with SMS Notification. It shows the relations between the tables and how they are connected and interact with each other. Firstly, the Core Profile and Team Assignment section manage the information about users, athletes, sports, teams, and team members, to ensure the proper registration of each athlete and assign them to sports and teams. Secondly, the Requirements and Uploaded Files section stores and manages the requirements, files, and forms about the athletes’ data to ensure all the relevant information is organized and available. Thirdly, the Training Schedules and Attendance section contains the sports, teams – athletes, training schedules, attendance to ensure that sports activities are properly monitored and recorded. Fourthly, Competitions and Athlete History section stores the data about competitions, participants, results, and history to ensure that the athletes can monitor their competition records and activity. Finally, Communication, Medical Records, and Audit Users section manages the communication part of the system including announcements, SMS logs, medical information and records about athletes, and other relevant information. The lines between two tables indicate the relations, PK stands for Primary Key that ensures the uniqueness of the field in the table, and FK stands for Foreign Key that ties two tables together.
+Design of Software/ Systems
+Software Development Methodology
+[IMAGE 9: media/image9.jpg]
+Figure 9. Spiral Model of Web-Based Sports Management Information System with SMS Notification
+The figure below represents a process of developing a web-based solution for athlete and event tracking with SMS communication. It can be seen that the system development is an iterative process involving development, testing, and improving the product until the end-users are satisfied.
+Phase 1: Planning
+In this stage, the team establishes the objectives of the system under consideration. For instance, the main purpose of this project is to develop a web-based system that monitors and tracks athletes and events while notifying the users via SMS. In addition, the team determines the stakeholders, which include athletes, coaches, administrators, and parents.
+Phase 2: Risk Analysis
+In this phase, the team conducts a risk analysis to examine the possible problems that may arise during the project implementation. For instance, the project may encounter such issues as data confidentiality, API and SMS challenges, and end-users’ adoption. Ideally, the team comes up with risk responses and long-term solutions to these problems. For instance, the team can address data confidentiality by considering data hosting services that are reliable and protected from external attacks.
+Phase 3: Engineering / Development
+At this stage, the team develops the system in accordance with the objectives set in Phase 1. For instance, the system will be designed to host web applications, manage and monitor athletes’ performance, and have a dashboard module that depicts the progress of each athlete. In addition, the system will offer features such as user accounts, SMS alerts, event management tools, and reports.
+Phase 4: Testing and Evaluation
+At this juncture, the team performs a test to establish the validity and reliability of the new system in terms of performance, security, and usability. For instance, the systems can be subjected to an end-to-end data encryption test to determine its resistance to attacks and SMS deliverability. The stakeholders such as coaches, administrators, and athletes participate in the testing process and give their recommendations.
+Phase 5: Iteration / Improvement
+The feedback gained from the testing phase guides the improvement of the system under development so that it meets the initial objectives. For instance, the feedback may reveal flaws that need to be addressed or new features to add, for instance, graphs and updated SMS reports. Then, the project team goes back to the planning phase, and the project cycle repeats itself until a quality product is achieved.
+Development and Testing
+Data Gathering Procedure
+The researchers will seek permission from the Sports Office before gathering data. Upon permission, they will conduct interviews and questionnaires with the coaches and athletes in order to understand their current business practices in terms of the management of data, attendance, schedules, results, and announcements. They will conduct observations as well in order to fully comprehend the issues and concerns these individuals face.
+Library Research
+The researcher availed the help of Isabela State University University Library resources and services to search for related studies, journals, books, and online references needed in developing the Web-Based Sports Management Information System with SMS Notification. The university library helps provide printed and electronic resources that may be helpful in meeting the research needs of students and those related to academic and technological studies.
+Observation
+During the observation, the researchers discovered that record management, schedules, and announcements are being done manually, which creates difficulties in managing and coordinating the activities of the participants. Information dissemination on issues related to training, events, and sports activities is hindered due to the lack of effective information communication mechanisms, such as SMS notification. The researchers also discovered that the coaches and administrators have faced many challenges with record management and monitoring of sports activities. As a result, the researchers recommended the development of a web-based system with SMS notification to facilitate faster information dissemination, improved record management, and enhanced coordination of the activities.
+Interviews
+The researchers interviewed selected coaches, athletes, and sports coordinators to understand the current situation and processes regarding the management of sports activities and records. In the course of conversation, the respondents explained that mostly everything is currently done manually, resulting in problems with up-to-date information and relevant announcements getting lost in the process. They also expressed the need for a faster and more systematic means of communication, especially in terms of sharing relevant news, information, and updates concerning the team’s training schedules and events. After compiling the information gathered from the respondents, the researchers concluded that a Web-based sports management information system with SMS notification would be of great help in terms of managing and disseminating sports-related announcements and records.
+Questionnaire
+The researchers adopted a questionnaire to gather data and receive feedback from athletes, coaches, and administrators concerning the issue of sports functions and communication. The questionnaire was designed to identify the primary concerns regarding the record, schedules, announcements, and updates of the sports events. The participants responded to the questionnaire by sharing their experiences and challenges in record management, communication breakdown, and the possible solution to these problems. The researchers received valuable information that led them to develop the Web-Based Sports Management Information System with SMS Notification to address the issue and handle all aspects of recording and communication efficiently.
+Data Analysis Plan
+The researchers will analyze all the data collected through interviews, observations, and questionnaires to understand the needs and requirements of the identified users. The information gathered will be helpful to identify the extent to which the web-based sports management information system with SMS notification can be useful and offer solutions to the existing problems.
+Table 4: Equivalent weight mean and interpretation of scale on the problems and challenges encountered by the respondents in Web-Based Sport’s Information System with SMS Notification
+[TABLE]
+Scale | Range | Interpretation
+5 | 4.21 – 5.00 | Very Much Problem
+4 | 3.41 – 4.20 | Much Problem
+3 | 2.61 – 3.40 | Problem
+2 | 1.81 – 2.60 | Less a Problem
+1 | 1.00 – 1.80 | Least a Problem
+Table 5: Equivalent weight mean and interpretation of scale on developed web based system using the ISO/IEC 25010:2023 sofyware quality evaluation.
+[TABLE]
+Scale | Range | Interpretation
+5 | 4.21 – 5.00 | Strongly Agree
+4 | 3.41 – 4.20 | Agree
+3 | 2.61 – 3. 40 | Average
+2 | 1.81 – 2.60 | Disagree
+1 | 1.00 – 1.80 | Strongly Disagree
+For finding the percentage of the samples in the presentation, analysis, and interpretation of data, the researchers used this formula:
+Where:
+% = percentage
+f = frequency
+n = number of respondents
+For finding the weighted mean in the presentation, analysis and interpretation of data, the researcher used this formula.
+WM = x1 + x2+x3+ ...xnN
+Where,
+WM - Weighted Mean x1 + x2+x3+ ...xn - Sum of Scores/Means
+N – Total Number of Respondents
+Different Software Testing
+Testing
+This testing phase will ensure that the system is fit to serve its intended purpose. In this way, it can guarantee that handling sports information and dissemination will be faster, more efficient, and organized for all stakeholders.
+Unit Testing
+Every aspect of the system will be individually verified including the login function, athlete data, scheduling, and SMS notifications, which ensures that each system operates effectively on an individual basis.
+Compatibility Testing
+In this phase, the system will undergo a test on multiple devices including desktop computers, laptops, tablets, and mobile phones. It will also be tested on various web browsers like Chrome, Firefox, and Edge to ensure that it displays and operates correctly on different platforms.
+Performance Testing
+The purpose of the test is to examine the system's stability and speed when a large number of users are accessing it at the same time, and also to assess how quickly and efficiently the system sends out SMS messages.
+User Acceptance Testing
+The system will likewise be assessed by real users such as coaches and administrators. Feedback from them is important in order to find out whether the system is useful, easy to understand, and meets their daily needs in the area of sports management.
+Security Testing
+Finally, the system will be checked to ensure that all the data is safe and secure. Access to important information such as athlete records will be restricted to authorized users only.
+Description of the Prototype
+System Architecture
+[IMAGE 10: media/image10.jpeg]
+Figure 9. System Architecture of Isabela State University – Cauayan Sports Borrowing System with SMS Notification
+It is here that all information is stored, including the athletes’ names, their stats, and the game schedules. So, when a coach decides to make a change, the brain executes it right away. These are the authorities. By means of their laptops, they “speak” to the brain in order to update the records or let it know that a particular practice was moved to a different field. Once the latter learns about the changes, it sends a digital “shout” via the router. The SMS Gateway is like a translator that converts the brain’s output into text messages so that they can be delivered via air. This is the ultimate goal. In this way, even if an athlete is off the grid or doesn’t have access to data or Wi-Fi, he/she will still be notified via SMS. It’s guaranteed that no one will miss a thing, and no one will show up at an abandoned gym.
+Implementation Plan
+[TABLE]
+STRATEGY | ACTIVITIES | PERSON’S INVOLVED | DURATION
+Approval from the Sports Department | Submission of Request Letter and Proposal | Researchers and Sports Coordinator | 1 Day
+System Installation | Set up the Web-Based Sports Management Information System | Researchers and IT Personnel | 2 Days
+User Orientation | Introduce and guide users on how to use the system | Researchers, Coaches, and Athletes | 1 Day
+Athlete Data Encoding | Enter athlete profiles, schedules, attendance, and records | Researchers and Administrators | 3 Days
+SMS Notification Setup | Configure SMS notification for announcements and reminders | Researchers and IT Personnel | 1 Day
+System Testing | Check the functions and identify possible errors | Researchers and Selected Users | 2 Days
+System Implementation | Deploy and officially use the system in the sports department | Researchers and Sports Staff | 1 Day

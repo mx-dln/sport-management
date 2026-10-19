@@ -30,6 +30,13 @@ $venueDate = trim((string)($_GET['venue_date'] ?? '2-6 February 2026; Isabela St
 $campusName = trim((string)($_GET['campus_name'] ?? 'Cauayan City'));
 $schoolCampus = trim((string)($_GET['school_campus'] ?? 'ISU - CAUAYAN'));
 $category = trim((string)($_GET['category'] ?? ''));
+$preparedBy = trim((string)($_GET['prepared_by'] ?? (current_user()['name'] ?? 'Coach / Sports Coordinator')));
+$preparedRole = trim((string)($_GET['prepared_role'] ?? 'Coach / Sports Coordinator'));
+$screenedBy = trim((string)($_GET['screened_by'] ?? ''));
+$screenedRole = trim((string)($_GET['screened_role'] ?? 'Official Tournament Secretariat'));
+$notedBy = trim((string)($_GET['noted_by'] ?? 'Campus Executive Officer'));
+$notedRole = trim((string)($_GET['noted_role'] ?? 'Campus Sports Director'));
+$signatureCount = 2 + ($screenedBy !== '' ? 1 : 0);
 
 // Detect or fallback category and sport/event name
 $selectedTeam = null;
@@ -272,6 +279,14 @@ require __DIR__ . '/../../includes/header.php';
     object-fit: cover;
     display: block;
 }
+.scuaa-signature-footer {
+    display: grid;
+    gap: 2.5rem;
+    align-items: end;
+}
+.scuaa-signature-block > div {
+    width: 13rem;
+}
 
 .scuaa-screen-wrapper {
     border-radius: 1.5rem;
@@ -392,13 +407,18 @@ html.dark .scuaa-sheet .text-slate-900 {
         print-color-adjust: exact !important;
     }
     .scuaa-sheet > footer {
-        display: flex !important;
-        align-items: flex-end !important;
-        justify-content: space-between !important;
         break-inside: avoid !important;
         page-break-inside: avoid !important;
         background: #ffffff !important;
         color: #000000 !important;
+    }
+    .scuaa-signature-footer {
+        display: grid !important;
+        align-items: end !important;
+        gap: 16mm !important;
+    }
+    .scuaa-signature-block > div {
+        width: 42mm !important;
     }
     .scuaa-photo-frame {
         border-color: #cbd5e1 !important;
@@ -552,6 +572,36 @@ html.dark .scuaa-sheet .text-slate-900 {
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">School/Campus Cell Label</label>
                         <input type="text" name="school_campus" value="<?= e($schoolCampus) ?>" class="form-input text-xs" placeholder="e.g. ISU - CAUAYAN">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Prepared By</label>
+                        <input type="text" name="prepared_by" value="<?= e($preparedBy) ?>" class="form-input text-xs" placeholder="Prepared by name">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Prepared Role</label>
+                        <input type="text" name="prepared_role" value="<?= e($preparedRole) ?>" class="form-input text-xs" placeholder="Coach / Sports Coordinator">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Screened By (optional)</label>
+                        <input type="text" name="screened_by" value="<?= e($screenedBy) ?>" class="form-input text-xs" placeholder="Leave blank to hide">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Screened Role</label>
+                        <input type="text" name="screened_role" value="<?= e($screenedRole) ?>" class="form-input text-xs" placeholder="Official Tournament Secretariat">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Noted By</label>
+                        <input type="text" name="noted_by" value="<?= e($notedBy) ?>" class="form-input text-xs" placeholder="Campus Executive Officer">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Noted Role</label>
+                        <input type="text" name="noted_role" value="<?= e($notedRole) ?>" class="form-input text-xs" placeholder="Campus Sports Director">
                     </div>
 
                     <div class="flex items-end">
@@ -770,28 +820,30 @@ html.dark .scuaa-sheet .text-slate-900 {
                         </tbody>
                     </table>
 
-                    <!-- Optional Footer Verification / Signature Section -->
-                    <footer class="mt-4 pt-2 border-t border-slate-300 text-[10px] text-black flex justify-between items-end">
-                        <div class="text-left">
+                    <!-- Footer Verification / Signature Section -->
+                    <footer class="scuaa-signature-footer mt-4 border-t border-slate-300 pt-3 text-[10px] text-black" style="grid-template-columns: repeat(<?= e((string)$signatureCount) ?>, minmax(0, 1fr));">
+                        <div class="scuaa-signature-block text-left">
                             <p class="font-bold">Prepared by:</p>
-                            <div class="mt-6 border-b border-black w-48 text-center font-bold">
-                                <?= e(current_user()['name'] ?? 'Coach / Team In-Charge') ?>
+                            <div class="mx-0 mt-6 border-b border-black text-center font-bold">
+                                <?= e($preparedBy) ?>
                             </div>
-                            <p class="text-[9px] text-slate-700">Coach / Sports Coordinator</p>
+                            <p class="text-[9px] text-slate-700"><?= e($preparedRole) ?></p>
                         </div>
-                        <div class="text-center">
-                            <p class="font-bold">Screened &amp; Verified by:</p>
-                            <div class="mt-6 border-b border-black w-48 text-center font-bold">
-                                Screening Committee
+                        <?php if ($screenedBy !== ''): ?>
+                            <div class="scuaa-signature-block text-center">
+                                <p class="font-bold">Screened &amp; Verified by:</p>
+                                <div class="mx-auto mt-6 border-b border-black text-center font-bold">
+                                    <?= e($screenedBy) ?>
+                                </div>
+                                <p class="text-[9px] text-slate-700"><?= e($screenedRole) ?></p>
                             </div>
-                            <p class="text-[9px] text-slate-700">Official Tournament Secretariat</p>
-                        </div>
-                        <div class="text-right">
+                        <?php endif; ?>
+                        <div class="scuaa-signature-block text-right">
                             <p class="font-bold">Noted by:</p>
-                            <div class="mt-6 border-b border-black w-48 text-center font-bold">
-                                Campus Executive Officer
+                            <div class="ml-auto mt-6 border-b border-black text-center font-bold">
+                                <?= e($notedBy) ?>
                             </div>
-                            <p class="text-[9px] text-slate-700">Campus Sports Director</p>
+                            <p class="text-[9px] text-slate-700"><?= e($notedRole) ?></p>
                         </div>
                     </footer>
                 </article>
