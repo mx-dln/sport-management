@@ -93,8 +93,8 @@ require __DIR__ . '/../../includes/header.php';
 </section>
 
 <div id="add-user-modal" class="fixed inset-0 z-[70] hidden bg-slate-950/60 p-4 backdrop-blur-sm" data-modal>
-    <div class="mx-auto flex min-h-full max-w-lg items-center">
-        <section class="w-full overflow-hidden rounded-2xl bg-white shadow-2xl">
+    <div class="mx-auto flex min-h-full max-w-5xl items-center justify-center">
+        <section class="flex max-h-[calc(100vh-2rem)] w-full flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
             <header class="flex items-center justify-between border-b border-slate-200 px-5 py-4">
                 <div>
                     <p class="text-xs font-bold uppercase tracking-wide text-slate-400">User Management</p>
@@ -102,31 +102,32 @@ require __DIR__ . '/../../includes/header.php';
                 </div>
                 <button class="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50" type="button" data-modal-close>Close</button>
             </header>
-            <form class="p-5" method="post" action="<?= project_url('app/ajax/user_ajax.php') ?>" data-ajax-form data-validate>
-                <label class="mb-3 block">
+            <form class="min-h-0 overflow-y-auto p-5" method="post" action="<?= project_url('app/ajax/user_ajax.php') ?>" data-ajax-form data-validate>
+                <div class="grid gap-x-5 gap-y-3 md:grid-cols-2">
+                <label class="block">
                     <span class="text-sm font-semibold text-slate-700">Full Name <span class="text-rose-600 font-bold">*</span></span>
                     <input class="form-input mt-1" name="name" required>
                 </label>
-                <label class="mb-3 block">
+                <label class="block">
                     <span class="text-sm font-semibold text-slate-700">Email Address <span class="text-rose-600 font-bold">*</span></span>
                     <input class="form-input mt-1" name="email" type="email" required>
                 </label>
-                <label class="mb-3 block">
+                <label class="block">
                     <span class="text-sm font-semibold text-slate-700">Contact Number (11 Digits)</span>
                     <input class="form-input mt-1" type="tel" name="phone_number" placeholder="09XXXXXXXXX (11 digits)" pattern="09[0-9]{9}" minlength="11" maxlength="11" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" data-phone-11>
                 </label>
-                <label class="mb-3 block">
+                <label class="block">
                     <span class="text-sm font-medium">Password</span>
                     <input class="form-input mt-1" name="password" type="password" placeholder="Default: password123">
                 </label>
-                <label class="mb-3 block">
+                <label class="block">
                     <span class="text-sm font-medium">Role</span>
                     <select class="form-input mt-1" name="role">
                         <option value="coach">Coach</option>
                         <option value="athlete">Athlete</option>
                     </select>
                 </label>
-                <fieldset class="mb-4 rounded-xl border border-slate-200 p-3" data-coach-sports-fieldset>
+                <fieldset class="rounded-xl border border-slate-200 p-3 md:col-span-2" data-coach-sports-fieldset>
                     <legend class="px-1 text-sm font-bold text-slate-700">Coach Sport Delegation</legend>
                     <p class="mb-2 text-xs text-slate-500">Required for coach accounts. Coaches can only manage delegated sports.</p>
                     <div class="grid gap-2 sm:grid-cols-2">
@@ -138,11 +139,12 @@ require __DIR__ . '/../../includes/header.php';
                         <?php endforeach; ?>
                     </div>
                 </fieldset>
-                <label class="mb-4 block">
+                <label class="block">
                     <span class="text-sm font-medium">Status</span>
                     <select class="form-input mt-1" name="status"><option value="active">ACTIVE</option><option value="inactive">INACTIVE</option></select>
                 </label>
-                <button class="btn-primary w-full" type="submit">Save User</button>
+                <button class="btn-primary w-full md:col-span-2" type="submit">Save User</button>
+                </div>
             </form>
         </section>
     </div>

@@ -11,6 +11,7 @@ $stmt->execute([current_user()['id']]);
 $athlete = $stmt->fetch();
 $historyStats = $athlete ? (new AthleteHistoryController($pdo))->stats((int)$athlete['id']) : [];
 $historyRecords = $athlete ? (new AthleteHistoryController($pdo))->forAthlete((int)$athlete['id']) : [];
+$docs = $athlete ? (new AthleteController($pdo))->documents((int)$athlete['id']) : [];
 
 // Check Birth Certificate & COG status specifically
 $birthCertDoc = null;
@@ -23,7 +24,6 @@ foreach ($docs as $d) {
         $cogDoc = $d;
     }
 }
-$docs = $athlete ? (new AthleteController($pdo))->documents((int)$athlete['id']) : [];
 $approvedDocs = count(array_filter($docs, fn($d) => ($d['status'] ?? '') === 'Approved'));
 $submittedDocs = count(array_filter($docs, fn($d) => in_array(($d['status'] ?? ''), ['Submitted', 'Approved'], true)));
 $schedules = [];
