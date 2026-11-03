@@ -106,6 +106,20 @@ document.addEventListener('submit', (event) => {
     startTopProgress();
 });
 
+window.addEventListener('beforeprint', () => {
+    if (document.documentElement.classList.contains('dark')) {
+        window._restoreThemeDarkAfterPrint = true;
+        document.documentElement.classList.remove('dark');
+    }
+});
+
+window.addEventListener('afterprint', () => {
+    if (window._restoreThemeDarkAfterPrint) {
+        document.documentElement.classList.add('dark');
+        delete window._restoreThemeDarkAfterPrint;
+    }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     updateThemeToggle();
     initEnhancedTables();
