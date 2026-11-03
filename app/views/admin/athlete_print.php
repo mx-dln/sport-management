@@ -53,21 +53,42 @@ $fieldsRight = [
 require __DIR__ . '/../../includes/header.php';
 ?>
 <style>
-/* Biodata Screen Styling (Light Mode & Dark Mode) */
+/* Biodata Screen Styling: University Forest Green Gradient Banner with Crisp White Typography */
 .biodata-header {
-    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 50%, #f8fafc 100%);
-    border: 1px solid #d1fae5;
-    color: #0f172a;
+    background: linear-gradient(135deg, var(--theme-color, #006738) 0%, #064e3b 45%, #0f172a 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.15), 0 2px 6px -2px rgba(0, 0, 0, 0.08);
 }
-html:not(.dark) .biodata-header {
-    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 50%, #f8fafc 100%) !important;
-    border-color: #d1fae5 !important;
-    color: #0f172a !important;
+.biodata-header * {
+    color: #ffffff;
 }
-html.dark .biodata-header {
-    background: #111827 !important;
-    border-color: #1e293b !important;
-    color: #f8fafc !important;
+.biodata-header-app {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+}
+.biodata-header-title {
+    color: #ffffff !important;
+    font-weight: 900 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+.biodata-header-sub {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500 !important;
+}
+.biodata-header-box {
+    background: rgba(255, 255, 255, 0.14) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    backdrop-filter: blur(6px);
+}
+.biodata-header-box-lbl {
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-weight: 700 !important;
+}
+.biodata-header-box-date {
+    color: #ffffff !important;
+    font-weight: 900 !important;
 }
 
 @media print {
@@ -227,14 +248,14 @@ html.dark .biodata-header {
                         <div class="grid h-16 w-16 place-items-center rounded-2xl bg-[#006738] text-xl font-black text-white shadow-xs"><?= e(substr(app_setting('app_short_name', 'SM'), 0, 4)) ?></div>
                     <?php endif; ?>
                     <div>
-                        <p class="biodata-header-app text-xs font-bold uppercase tracking-wider text-[#006738] dark:text-emerald-400"><?= e(app_setting('app_name')) ?></p>
-                        <h1 class="biodata-header-title text-2xl font-black tracking-tight text-slate-950 dark:text-white"><?= e(school_name()) ?></h1>
-                        <p class="biodata-header-sub text-sm font-semibold text-slate-600 dark:text-slate-400">Athlete Biodata and Attachments</p>
+                        <p class="biodata-header-app text-xs font-bold uppercase tracking-wider"><?= e(app_setting('app_name')) ?></p>
+                        <h1 class="biodata-header-title text-2xl font-black tracking-tight"><?= e(school_name()) ?></h1>
+                        <p class="biodata-header-sub text-sm font-semibold">Athlete Biodata and Attachments</p>
                     </div>
                 </div>
-                <div class="biodata-header-box rounded-2xl border border-emerald-200/60 bg-white/95 px-4 py-3 text-right shadow-xs dark:border-slate-700 dark:bg-slate-800">
-                    <p class="biodata-header-box-lbl text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Generated</p>
-                    <p class="biodata-header-box-date text-sm font-black text-slate-950 dark:text-white"><?= e(date('F j, Y')) ?></p>
+                <div class="biodata-header-box rounded-2xl px-4 py-3 text-right">
+                    <p class="biodata-header-box-lbl text-[10px] font-bold uppercase tracking-wider">Generated</p>
+                    <p class="biodata-header-box-date text-sm font-black"><?= e(date('F j, Y')) ?></p>
                 </div>
             </div>
         </header>
