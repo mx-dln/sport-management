@@ -26,7 +26,7 @@
     html.dark .bg-slate-900, html.dark .bg-slate-950 {
         background-color: #ffffff !important;
     }
-    html.dark .text-slate-950, html.dark .text-slate-900, html.dark .text-slate-800, html.dark .text-white {
+    html.dark .text-slate-950, html.dark .text-slate-900, html.dark .text-slate-800 {
         color: #0f172a !important;
     }
     html.dark .text-slate-700, html.dark .text-slate-600 {

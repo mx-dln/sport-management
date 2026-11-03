@@ -149,10 +149,10 @@ require __DIR__ . '/../../includes/header.php';
     }
     .biodata-header {
         margin-bottom: 8mm !important;
-        background: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
-        border-top: 3.5px solid #006738 !important;
-        color: #0f172a !important;
+        background: linear-gradient(135deg, var(--theme-color, #006738) 0%, #064e3b 45%, #0f172a 100%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        border-radius: 12px !important;
+        color: #ffffff !important;
         box-shadow: none !important;
         padding: 5mm 6mm !important;
         display: block !important;
@@ -160,38 +160,48 @@ require __DIR__ . '/../../includes/header.php';
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
+    .biodata-header,
+    .biodata-header * {
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
     .biodata-header-app {
-        color: #006738 !important;
+        color: rgba(255, 255, 255, 0.88) !important;
         font-size: 8pt !important;
         font-weight: 800 !important;
         text-transform: uppercase !important;
         letter-spacing: .04em !important;
     }
     .biodata-header-title {
-        color: #0f172a !important;
+        color: #ffffff !important;
         font-size: 15pt !important;
         font-weight: 900 !important;
         margin-top: 1mm !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
     }
     .biodata-header-sub {
-        color: #475569 !important;
+        color: rgba(255, 255, 255, 0.92) !important;
         font-size: 8.5pt !important;
         margin-top: 0.5mm !important;
     }
     .biodata-header-box {
-        background: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
+        background: rgba(255, 255, 255, 0.15) !important;
+        border: 1px solid rgba(255, 255, 255, 0.28) !important;
+        border-radius: 8px !important;
         padding: 2.5mm 4mm !important;
         text-align: right !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
     .biodata-header-box-lbl {
-        color: #64748b !important;
+        color: rgba(255, 255, 255, 0.8) !important;
         font-size: 7pt !important;
         font-weight: 700 !important;
         text-transform: uppercase !important;
     }
     .biodata-header-box-date {
-        color: #0f172a !important;
+        color: #ffffff !important;
         font-size: 9.5pt !important;
         font-weight: 900 !important;
     }
